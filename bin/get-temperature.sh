@@ -2,7 +2,9 @@
 
 # setup the log file
 targetDir="/var/lib/tomcat9/webapps/home-services";
-mkdir "$targetDir/raw";
+if [ ! -d "$targetDir/raw" ]; then
+  mkdir -p "$targetDir/raw";
+fi
 rawFile="$targetDir/raw/temperature.raw";
 jsonFile="$targetDir/temperature.json";
 
