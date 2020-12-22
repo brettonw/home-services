@@ -18,7 +18,7 @@ do
     esac
 
     timestamp=$(date +%s);
-    echo "    , { \"timestamp\": $timestamp, \"roundTrip\": \"$roundTrip\" }" >> "$logfile.raw";
+    echo "    , { \"timestamp\": $timestamp, \"roundTrip\": \"$roundTrip\" }" >> $rawFile;
 
     # once per minute, go ahead and consolidate the JSON output
     counter=$(( counter + 1 ));
