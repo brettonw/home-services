@@ -1,7 +1,7 @@
 # /usr/bin/env bash
 
 # setup the log file
-$targetDir="/var/lib/tomcat9/webapps/home-services";
+targetDir="/var/lib/tomcat9/webapps/home-services";
 mkdir "$targetDir/raw";
 rawFile="$targetDir/raw/temperature.raw";
 jsonFile="$targetDir/temperature.json";
