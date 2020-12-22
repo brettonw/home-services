@@ -37,7 +37,7 @@ let refresh = function () {
             dataSetMax.push ({ x: i, y: average.max });
         }
 
-        let svg = PlotSvg.setPlotPoints (false).setLegendPosition(440, 340).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSetArray, ["min", "avg", "max"]);
+        let svg = PlotSvg.setPlotPoints (false).setLegendPosition(480, 380).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSetArray, ["min", "avg", "max"]);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-ping");
