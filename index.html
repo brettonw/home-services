@@ -3,7 +3,7 @@
     <head>
         <meta id="myViewport" name="viewport" content="width=device-width,user-scalable=yes">
         <meta charset=utf-8>
-        <title>Ping</title>
+        <title>Home Services</title>
         <link rel="stylesheet" type="text/css" href="https://bedrock.brettonw.com/dist/latest/bedrock.css">
         <link rel="stylesheet" type="text/css" href="https://brettonw.github.io/plot-svg.js/plot-svg.css">
     </head>
@@ -14,20 +14,26 @@
             max-width: 1200px;
         }
         .plotShell {
-            width: 40%;
+            width: 80%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .plotShellInterior {
             display: inline-block;
+            width: 47%;
             border: solid;
             border-width: 1px;
             border-radius: 2px;
             border-color: #bbb;
-            margin: 0 auto;
+            margin: 0;
         }
     </style>
 
     <body>
-        <div>
-            <div class="plotShell" id="plot-ping"></div>
-            <div class="plotShell" id="plot-temperature"></div>
+        <h1>Home Services</h1>
+        <div class="plotShell">
+            <div class="plotShellInterior" id="plot-ping"></div>
+            <div class="plotShellInterior" id="plot-temperature"></div>
         </div>
         <ul>
             <li><a href="https://unifi-cloudkey-gen2/">Unifi Cloud Key Network Controller</a></li>

@@ -66,7 +66,7 @@ Bedrock.Http.get(temperatureDataSourceUrl, (response) => {
         dataSet.push ({ x: i, y: average });
     }
 
-    let svg = PlotSvg.setPlotPoints (false).singleLine("System Temperature", "Time (Minutes Ago)", "Temperature", dataSet);
+    let svg = PlotSvg.setPlotPoints (false).singleLine("System Temperature", "Time (Minutes Ago)", "Temperature (Celsius)", dataSet);
 
     // size the display element, the graph itself has aspect 4:3
     let divElement = document.getElementById("plot-temperature");
