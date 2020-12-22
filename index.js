@@ -75,8 +75,9 @@ let refresh = function () {
         divElement.innerHTML = svg;
     });
 
+    // refresh at the beginning of every minute
     var now = new Date();
-    var delay = 60 * 1000; // 1 min in msec
+    var delay = 60 * 1000;
     var start = delay - (now.getSeconds()) * 1000 + now.getMilliseconds();
 
     setTimeout(refresh, start);
