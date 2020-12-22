@@ -74,7 +74,13 @@ let refresh = function () {
         divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
         divElement.innerHTML = svg;
     });
+
+    var now = new Date();
+    var delay = 60 * 1000; // 1 min in msec
+    var start = delay - (now.getSeconds()) * 1000 + now.getMilliseconds();
+
+    setTimeout(refresh, start);
 }
 
-setInterval(refresh, 60 * 1000);
+refresh ();
 
