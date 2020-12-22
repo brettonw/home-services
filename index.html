@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta id="myViewport" name="viewport" content="width=device-width,user-scalable=yes">
+        <meta charset=utf-8>
+        <title>Ping</title>
+        <link rel="stylesheet" type="text/css" href="https://bedrock.brettonw.com/dist/latest/bedrock.css">
+        <link rel="stylesheet" type="text/css" href="https://brettonw.github.io/plot-svg.js/plot-svg.css">
+    </head>
+
+    <style>
+        body {
+            width: 90%;
+            max-width: 1200px;
+        }
+        .plotShell {
+            width: 40%;
+            display: inline-block;
+            border: solid;
+            border-width: 1px;
+            border-radius: 2px;
+            border-color: #bbb;
+            margin: 0 auto;
+        }
+    </style>
+
+    <body>
+        <div>
+            <div class="plotShell" id="plot-ping"></div>
+            <div class="plotShell" id="plot-temperature"></div>
+        </div>
+        <ul>
+            <li><a href="https://unifi-cloudkey-gen2/">Unifi Cloud Key Network Controller</a></li>
+            <li><a href="https://unifi-cloudkey-gen2:8443/manage/site/default/dashboard">Unifi Network Dashboard</a></li>
+            <li><a href="http://192.168.100.1/">Netgear Modem</a></li>
+            <li><a href="http://home-services.local:8123">Home Assistant</a></li>
+            <li><a href="http://home-services.local:3001">Infinitude - Main Level</a></li>
+            <li><a href="http://home-services.local:3002">Infinitude - Upstairs</a></li>
+            <li><a href="BAK">BAK</a></li>
+        </ul>
+    </body>
+
+    <script src="https://bedrock.brettonw.com/dist/latest/bedrock.js"></script>
+    <script src="https://brettonw.github.io/plot-svg.js/plot-svg.js"></script>
+    <script src="index.js"></script>
+</html>
