@@ -14,7 +14,7 @@ while :
 do
     # get the temperature with the timestamp and write it to the raw log
     temperature=$(cat /sys/class/thermal/thermal_zone0/temp);
-    timestamp=$(date +%s);
+    timestamp=$(date +%s%3N);
     echo "    , { \"timestamp\": $timestamp, \"temperature\": $temperature }" >> $rawFile;
 
     # once per minute, go ahead and consolidate the JSON output

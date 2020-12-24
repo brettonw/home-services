@@ -2,3 +2,4 @@
 *.raw
 *.json
 *.out
+.idea
