@@ -45,7 +45,7 @@ let refresh = function () {
     const graphMinutes = graphHours * 60;
 
     // set plot colors to repeat correctly
-    let colors = ["rgb(132,186,91)", "rgb(114,147,203)", "rgb(225,151,76)"];
+    let colors = ["rgb(114,147,203)", "rgb(132,186,91)", "rgb(225,151,76)"];
     PlotSvg.setColors (colors);
 
 
@@ -61,7 +61,7 @@ let refresh = function () {
         // create the data set to display
         let sources = splitSource (response);
         let dataSets = [];
-        let legend = ["min", "avg", "max"];
+        let legend = ["avg", "min", "max"];
 
         // loop over all of the source sets
         for (let source of sources) {
@@ -69,7 +69,7 @@ let refresh = function () {
                 let dataSetMin = [];
                 let dataSetAvg = [];
                 let dataSetMax = [];
-                dataSets.push(dataSetMin, dataSetAvg, dataSetMax);
+                dataSets.push(dataSetAvg, dataSetMin, dataSetMax);
 
                 for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
                     let offset = i * responsesPerMinute;
