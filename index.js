@@ -44,6 +44,11 @@ let refresh = function () {
     const graphHours = 3;
     const graphMinutes = graphHours * 60;
 
+    // set plot colors to repeat correctly
+    let colors = ["rgb(132,186,91)", "rgb(114,147,203)", "rgb(225,151,76)"];
+    PlotSvg.setColors (colors);
+
+
     Bedrock.Http.get(pingDataSourceUrl, (response) => {
         // the first element is always (0, 0)
         response.shift ();
@@ -56,11 +61,7 @@ let refresh = function () {
         // create the data set to display
         let sources = splitSource (response);
         let dataSets = [];
-        let legend = [];
-
-        // add two data sets to set a range
-        dataSets.push ([{ x: 0, y: 0}]);
-        dataSets.push ([{ x: 0, y: 100}]);
+        let legend = ["min", "avg", "max"];
 
         // loop over all of the source sets
         for (let source of sources) {
@@ -69,7 +70,6 @@ let refresh = function () {
                 let dataSetAvg = [];
                 let dataSetMax = [];
                 dataSets.push(dataSetMin, dataSetAvg, dataSetMax);
-                legend.push ("min", "avg", "max");
 
                 for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
                     let offset = i * responsesPerMinute;
@@ -91,6 +91,12 @@ let refresh = function () {
                 }
             }
         }
+
+        // add two data sets to set a range
+        dataSets.push ([{ x: 0, y: 0}]);
+        dataSets.push ([{ x: 0, y: 100}]);
+
+        // create the actual plot
         let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSets, legend);
 
         // size the display element, the graph itself has aspect 4:3
@@ -112,10 +118,6 @@ let refresh = function () {
         // create the data set to display
         let sources = splitSource (response);
         let dataSets = [];
-
-        // add two data sets to set a range
-        dataSets.push ([{ x: 0, y: 46}]);
-        dataSets.push ([{ x: 0, y: 52}]);
 
         // loop over all of the source sets
         for (let source of sources) {
@@ -142,6 +144,12 @@ let refresh = function () {
                 }
             }
         }
+
+        // add two data sets to set a range
+        dataSets.push ([{ x: 0, y: 46}]);
+        dataSets.push ([{ x: 0, y: 52}]);
+
+        // create the actual plot
         let svg = PlotSvg.setPlotPoints (false).multipleLine("System Temperature", "Time (Minutes Ago)", "Temperature (Celsius)", dataSets);
 
         // size the display element, the graph itself has aspect 4:3
