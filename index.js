@@ -4,18 +4,32 @@ const  pingDataSourceUrl = "ping.json";
 const temperatureDataSourceUrl = "temperature.json";
 
 let refresh = function () {
+    // timestamps are in seconds or ms, but we always want ms
+    let conditionTime = function (t) {
+        // if t is in seconds, expand it to ms
+        return (t < 1.e10) ? (t * 1e3) : t;
+    };
+
+    // compute the delta minutes between two timestamps
+    const msToMinutes = 1 / (1000 * 60);
+    let minutesDelta = function (t1, t2) {
+        let deltaMs = Math.abs (conditionTime(t1) - conditionTime (t2));
+        let deltaMinutes = deltaMs * msToMinutes;
+        return deltaMinutes;
+    };
+
     // a source data array might not have any data in it for some time periods, for
     // instance if the server was offline during the data collection. we split such an
     // array into multiple arrays rather than try to correlate them
     let splitSource = function (source) {
-        // the expected gap is about 10 milliseconds, so we will look for gaps bigger than
-        // 15 milliseconds, and fill them with a proto value
-        let maxGap = 15;
+        // the expected gap is about 10 seconds, so we will look for gaps bigger than
+        // 15 seconds, or 0.25 minutes
+        let maxGap = 0.25;
         let sources = [];
 
         let start = 0;
         for (let i = 1; i < source.length; ++i) {
-            if (Math.abs (source[i].timestamp - source[i - 1].timestamp) > maxGap) {
+            if (minutesDelta(source[i].timestamp, source[i - 1].timestamp) > maxGap) {
                 sources.push (source.slice (start, i));
                 start = i;
             }
@@ -23,19 +37,6 @@ let refresh = function () {
 
         // return the result
         return sources;
-    };
-
-    // timestamps are in seconds or ms, but we always want ms
-    let conditionTime = function (t) {
-        // if t is in seconds, expand it to ms
-        return (t < 1.e10) ? (t * 1e3) : t;
-    };
-
-    const msToMinutes = 1 / (1000 * 60);
-    let minutesDelta = function (t1, t2) {
-        let deltaMs = Math.abs (conditionTime(t1) - conditionTime (t2));
-        let deltaMinutes = deltaMs * msToMinutes;
-        return deltaMinutes;
     };
 
     // all of our samples are being conducted in 10 second intervals
