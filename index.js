@@ -56,7 +56,7 @@ let refresh = function () {
         // create the data set to display
         let sources = splitSource (response);
         let dataSets = [];
-        let legend = ["min", "avg", "max"];
+        let legend = [];
 
         // add two data sets to set a range
         dataSets.push ([{ x: 0, y: 0}]);
@@ -69,6 +69,7 @@ let refresh = function () {
                 let dataSetAvg = [];
                 let dataSetMax = [];
                 dataSets.push(dataSetMin, dataSetAvg, dataSetMax);
+                legend.push ("min", "avg", "max");
 
                 for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
                     let offset = i * responsesPerMinute;
@@ -90,7 +91,7 @@ let refresh = function () {
                 }
             }
         }
-        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 380).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSets, legend);
+        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSets, legend);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-ping");
