@@ -58,6 +58,10 @@ let refresh = function () {
         let dataSets = [];
         let legend = ["min", "avg", "max"];
 
+        // add two data sets to set a range
+        dataSets.push ([{ x: 0, y: 0}]);
+        dataSets.push ([{ x: 0, y: 100}]);
+
         // loop over all of the source sets
         for (let source of sources) {
             if (minutesDelta(source[0].timestamp, nowTime) < graphMinutes) {
