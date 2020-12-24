@@ -97,7 +97,7 @@ let refresh = function () {
         dataSets.push ([{ x: 0, y: 100}]);
 
         // create the actual plot
-        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Time (ms)", dataSets, legend);
+        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-ping");
