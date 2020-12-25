@@ -50,68 +50,80 @@ let refresh = function () {
 
     let nowTime = Date.now(); //response[0].timestamp;
 
-    let makePingChart = function (sourceUrl, elementId) {
-        Bedrock.Http.get(sourceUrl, (response) => {
-            // the first element is always (0, 0)
-            let info = response.shift();
+    let digestSource = function (source, key) {
+        let dataSet = [];
 
-            // the times need to be expressed as minutes ago, so we start by reversing the
-            // input data to make the first sample be the latest one
-            response.reverse();
+        // trim the source to be only full minutes in length
+        source.length -= source.length % responsesPerMinute;
 
-            // create the data set to display
-            let sources = splitSource(response);
-            let dataSets = [];
-            let legend = ["avg", "min", "max"];
+        // loop over the array in minute long chunks
+        for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
+            let offset = i * responsesPerMinute;
+            let minute = source.slice(offset, offset + responsesPerMinute);
+            let average = minute.reduce(function (total, current) {
+                return {
+                    x: total.x + (minutesDelta(current.timestamp, nowTime) / responsesPerMinute),
+                    y: total.y + (current[key] / responsesPerMinute)
+                }
+            }, {x: 0, y: 0});
+            if (average.x < graphMinutes) {
+                dataSet.push(average);
+            } else {
+                break;
+            }
+        }
 
-            // loop over all of the source sets
-            for (let source of sources) {
-                if (minutesDelta(source[0].timestamp, nowTime) < graphMinutes) {
-                    let dataSetMin = [];
-                    let dataSetAvg = [];
-                    let dataSetMax = [];
-                    dataSets.push(dataSetAvg, dataSetMin, dataSetMax);
+        return dataSet;
+    };
 
-                    // trim the source to be only full minutes in length
-                    source.length -= source.length % responsesPerMinute;
+    let makePingChart = function (sourceUrls, elementId) {
+        let dataSets = [];
+        let legend = [];
+        let pingColors = [];
 
-                    // loop over the array in minute long chunks
-                    for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
-                        let offset = i * responsesPerMinute;
-                        let minute = source.slice(offset, offset + responsesPerMinute);
-                        let average = minute.reduce(function (total, current) {
-                            let times = current.roundTrip.split("/");
-                            return {
-                                x: total.x + (minutesDelta(current.timestamp, nowTime) / responsesPerMinute),
-                                min: total.min + (times[0] / responsesPerMinute),
-                                avg: total.avg + (times[1] / responsesPerMinute),
-                                max: total.max + (times[2] / responsesPerMinute)
-                            };
-                        }, {x: 0, min: 0, avg: 0, max: 0});
-                        if (average.x < graphMinutes) {
-                            dataSetAvg.push({x: average.x, y: average.avg});
-                            dataSetMin.push({x: average.x, y: average.min});
-                            dataSetMax.push({x: average.x, y: average.max});
+        let asyncGatherChart = function (sourceUrls) {
+            if (sourceUrls.length > 0) {
+                Bedrock.Http.get(sourceUrls[0], (response) => {
+                    // the first element is always (0, 0)
+                    let info = response.shift();
+
+                    // the times need to be expressed as minutes ago, so we start by reversing the
+                    // input data to make the first sample be the latest one
+                    response.reverse();
+
+                    // loop over all of the source sets
+                    for (let source of splitSource(response)) {
+                        // only push a legend entry once
+                        legend.push (info.target);
+                        info.target = "";
+
+                        // loop over all the data to add them to the dataSets
+                        let dataSet = digestSource (source.map ( a => ({ timestamp: a.timestamp, avg: a.roundTrip.split("/")[1] }) ), "avg");
+                        if (dataSet.length > 0) {
+                            dataSets.push (dataSet);
                         }
                     }
-                }
+
+                    // recur until we've read all the sources
+                    asyncGatherChart(sourceUrls.slice (1, sourceUrls.length));
+                });
+            } else {
+                // add two data sets to set a nominal range
+                dataSets.push([{x: 0, y: 0}]);
+                dataSets.push([{x: 0, y: 40}]);
+
+                // create the actual plot
+                let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
+
+                // size the display element, the graph itself has aspect 4:3
+                let divElement = document.getElementById(elementId);
+                divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
+                divElement.innerHTML = svg;
             }
-
-            // add two data sets to set a range
-            dataSets.push([{x: 0, y: 0}]);
-            dataSets.push([{x: 0, y: 40}]);
-
-            // create the actual plot
-            let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping (" + info.target + ")", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
-
-            // size the display element, the graph itself has aspect 4:3
-            let divElement = document.getElementById(elementId);
-            divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
-            divElement.innerHTML = svg;
-        });
+        };
+        asyncGatherChart(sourceUrls);
     };
-    makePingChart("ping-1.1.1.1.json", "plot-ping-1");
-    makePingChart("ping-96.120.104.221.json", "plot-ping-2");
+    makePingChart(["ping-96.120.104.221.json", "ping-1.1.1.1.json"], "plot-ping");
 
 
     Bedrock.Http.get(temperatureDataSourceUrl, (response) => {
@@ -128,27 +140,9 @@ let refresh = function () {
 
         // loop over all of the source sets
         for (let source of sources) {
-            if (minutesDelta(source[0].timestamp, nowTime) < graphMinutes) {
-                let dataSet = [];
-                dataSets.push(dataSet);
-
-                // trim the source to be only full minutes in length
-                source.length -= source.length % responsesPerMinute;
-
-                // loop over the array in minute long chunks
-                for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
-                    let offset = i * responsesPerMinute;
-                    let minute = source.slice(offset, offset + responsesPerMinute);
-                    let average = minute.reduce(function (total, current) {
-                        return {
-                            x: total.x + (minutesDelta(current.timestamp, nowTime) / responsesPerMinute),
-                            y: total.y + (current.temperature / (1.0e3 * responsesPerMinute))
-                        }
-                    }, {x: 0, y: 0});
-                    if (average.x < graphMinutes) {
-                        dataSet.push(average);
-                    }
-                }
+            let dataSet = digestSource (source, "temperature");
+            if (dataSet.length > 0) {
+                dataSets.push (dataSet.map (a => ({ x: a.x, y: a.y / 1000 })));
             }
         }
 
