@@ -52,7 +52,7 @@ let refresh = function () {
 
     Bedrock.Http.get(pingDataSourceUrl, (response) => {
         // the first element is always (0, 0)
-        response.shift ();
+        let info = response.shift ();
 
         // the times need to be expressed as minutes ago, so we start by reversing the
         // input data to make the first sample be the latest one
@@ -101,7 +101,7 @@ let refresh = function () {
         dataSets.push ([{ x: 0, y: 100}]);
 
         // create the actual plot
-        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping 1.1.1.1", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
+        let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping (" + info.target + ")", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-ping");

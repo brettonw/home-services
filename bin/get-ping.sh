@@ -1,5 +1,8 @@
 # /usr/bin/env bash
 
+#targetGateway="1.1.1.1";
+targetGateway="96.120.104.221";
+
 # define a logging function
 echoerr() { echo "$@" 1>&2; }
 
@@ -19,7 +22,7 @@ while :
 do
     # get the temperature with the timestamp and write it to the raw log
     timestamp=$(date +%s%3N);
-    roundTrip=$(ping -c 5 1.1.1.1 | grep "min/avg/max/mdev");
+    roundTrip=$(ping -c 5 $targetGateway | grep "min/avg/max/mdev");
     case ${roundTrip+x$roundTrip} in
         (x*[![:space:]]*) roundTrip=$(echo $roundTrip | awk '{split($0,a," "); print a[4]}');;
         (*) roundTrip="1000/1000/1000";
@@ -34,9 +37,9 @@ do
         tail -c 10G $rawFile >  "$rawFile.tmp";
         mv "$rawFile.tmp" $rawFile;
 
-        # concat everything into the JSON log, this is a bit ugly
+        # concat everything into the JSON log, this is a bit ugly, but we pass some additional info in the first record
         echo "[" > $jsonFile;
-        echo "      { \"timestamp\": 0, \"temperature\": 0 }" >> $jsonFile;
+        echo "      { \"timestamp\": 0, \"target\": \"$targetGateway\", \"temperature\": 0 }" >> $jsonFile;
         cat $rawFile >> $jsonFile;
         echo "]" >> $jsonFile;
     fi
