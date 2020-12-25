@@ -33,6 +33,7 @@ let refresh = function () {
                 start = i;
             }
         }
+        sources.push (source.slice (start, source.length));
 
         // return the result
         return sources;
