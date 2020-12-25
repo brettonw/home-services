@@ -50,7 +50,7 @@ let refresh = function () {
     let nowTime = Date.now(); //response[0].timestamp;
 
     let makePingChart = function (sourceUrl, elementId) {
-        Bedrock.Http.get(pingDataSourceUrl, (response) => {
+        Bedrock.Http.get(sourceUrl, (response) => {
             // the first element is always (0, 0)
             let info = response.shift();
 
