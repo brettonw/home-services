@@ -71,6 +71,10 @@ let refresh = function () {
                 let dataSetMax = [];
                 dataSets.push(dataSetAvg, dataSetMin, dataSetMax);
 
+                // trim the source to be only full minutes in length
+                source.length -= source.length % responsesPerMinute;
+
+                // loop over the array in minute long chunks
                 for (let i = 0, end = Math.min(source.length / responsesPerMinute, graphMinutes); i < end; ++i) {
                     let offset = i * responsesPerMinute;
                     let minute = source.slice(offset, offset + responsesPerMinute);
