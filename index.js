@@ -48,6 +48,7 @@ let refresh = function () {
     let colors = ["rgb(114,147,203)", "rgb(132,186,91)", "rgb(225,151,76)"];
     PlotSvg.setColors (colors);
 
+    let nowTime = Date.now(); //response[0].timestamp;
 
     Bedrock.Http.get(pingDataSourceUrl, (response) => {
         // the first element is always (0, 0)
@@ -56,7 +57,6 @@ let refresh = function () {
         // the times need to be expressed as minutes ago, so we start by reversing the
         // input data to make the first sample be the latest one
         response.reverse ();
-        let nowTime = response[0].timestamp;
 
         // create the data set to display
         let sources = splitSource (response);
@@ -113,7 +113,6 @@ let refresh = function () {
         // the times need to be expressed as minutes ago, so we start by reversing the
         // input data to make the first sample be the latest one
         response.reverse ();
-        let nowTime = response[0].timestamp;
 
         // create the data set to display
         let sources = splitSource (response);
