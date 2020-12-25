@@ -84,8 +84,8 @@ let refresh = function () {
                         };
                     }, {x: 0, min: 0, avg: 0, max: 0});
                     if (average.x < graphMinutes) {
-                        dataSetMin.push({x: average.x, y: average.min});
                         dataSetAvg.push({x: average.x, y: average.avg});
+                        dataSetMin.push({x: average.x, y: average.min});
                         dataSetMax.push({x: average.x, y: average.max});
                     }
                 }
