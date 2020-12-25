@@ -104,12 +104,13 @@ let refresh = function () {
             let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping (" + info.target + ")", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
             // size the display element, the graph itself has aspect 4:3
-            let divElement = document.getElementById("plot-ping");
+            let divElement = document.getElementById(elementId);
             divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
             divElement.innerHTML = svg;
         });
     };
-    makePingChart("ping.json", "plot-ping");
+    makePingChart("ping-1.1.1.1.json", "plot-ping-1");
+    makePingChart("ping-96.120.104.221.json", "plot-ping-2");
 
 
     Bedrock.Http.get(temperatureDataSourceUrl, (response) => {
