@@ -41,10 +41,13 @@ do
 
     # sleep for a little bit (making the whole loop land on 10 second intervals)
     nowtimestamp=$(date +%s%3N);
-    delta=$(( (10000-((nowtimestamp-starttimestamp) % 10000)) / 1000 ));
+    delta=$(( (10000-((nowtimestamp-starttimestamp) % 10000)) ));
     if [ $delta -gt 0 ]; then
+      delta=$(( delta/1000 ));
       echoerr "sleeping for $delta seconds";
       sleep $delta;
+    else
+      echoerr "PROBLEM: not sleeping ($delta ms)";
     fi;
 done
 
