@@ -1,7 +1,12 @@
 # /usr/bin/env bash
 
-#targetGateway="1.1.1.1";
-targetGateway="96.120.104.221";
+#targetGateway="96.120.104.221";
+# get the target from the input parameters
+if [ $# -eq 1 ]; then
+    targetGateway=$1;
+else
+    targetGateway="1.1.1.1";
+fi
 
 # define a logging function
 echoerr() { echo "$@" 1>&2; }
@@ -11,8 +16,8 @@ targetDir="/var/lib/tomcat9/webapps/home-services";
 if [ ! -d "$targetDir/raw" ]; then
   mkdir -p "$targetDir/raw";
 fi
-rawFile="$targetDir/raw/ping.raw";
-jsonFile="$targetDir/ping.json";
+rawFile="$targetDir/raw/ping-$targetGateway.raw";
+jsonFile="$targetDir/ping-$targetGateway.json";
 
 # setup the script start time and the counter
 startTimestamp=$(date +%s%3N);
