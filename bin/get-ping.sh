@@ -46,7 +46,7 @@ do
     nowTimestamp=$(date +%s%3N);
     delta=$(( (targetTimestamp-nowTimestamp)/1000 ));
     if [ $delta -gt 0 ]; then
-      echoerr "sleeping for $delta seconds";
+      #echoerr "sleeping for $delta seconds";
       sleep $delta;
     else
       echoerr "PROBLEM: not sleeping ($delta ms)";
