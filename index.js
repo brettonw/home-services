@@ -46,7 +46,6 @@ let refresh = function () {
 
     // set plot colors to repeat correctly
     let colors = ["rgb(114,147,203)", "rgb(132,186,91)", "rgb(225,151,76)"];
-    PlotSvg.setColors (colors);
 
     let nowTime = Date.now(); //response[0].timestamp;
 
@@ -81,9 +80,9 @@ let refresh = function () {
         let legend = [];
         let pingColors = [];
 
-        let asyncGatherChart = function (sourceUrls) {
-            if (sourceUrls.length > 0) {
-                Bedrock.Http.get(sourceUrls[0], (response) => {
+        let asyncGatherChart = function (sourceUrlIndex) {
+            if (sourceUrls.length > sourceUrlIndex) {
+                Bedrock.Http.get(sourceUrls[sourceUrlIndex], (response) => {
                     // the first element is always (0, 0)
                     let info = response.shift();
 
@@ -95,6 +94,7 @@ let refresh = function () {
                     for (let source of splitSource(response)) {
                         // only push a legend entry once
                         legend.push (info.target);
+                        pingColors.push (colors[sourceUrlIndex % colors.length]);
                         info.target = "";
 
                         // loop over all the data to add them to the dataSets
@@ -105,7 +105,7 @@ let refresh = function () {
                     }
 
                     // recur until we've read all the sources
-                    asyncGatherChart(sourceUrls.slice (1, sourceUrls.length));
+                    asyncGatherChart(sourceUrlIndex + 1);
                 });
             } else {
                 // add two data sets to set a nominal range
@@ -113,7 +113,11 @@ let refresh = function () {
                 dataSets.push([{x: 0, y: 40}]);
 
                 // create the actual plot
-                let svg = PlotSvg.setPlotPoints(false).setLegendPosition(480, 360).multipleLine("Ping", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
+                let svg = PlotSvg
+                    .setColors (pingColors)
+                    .setPlotPoints(false)
+                    .setLegendPosition(480, 360)
+                    .multipleLine("Ping", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
                 // size the display element, the graph itself has aspect 4:3
                 let divElement = document.getElementById(elementId);
@@ -121,7 +125,7 @@ let refresh = function () {
                 divElement.innerHTML = svg;
             }
         };
-        asyncGatherChart(sourceUrls);
+        asyncGatherChart(0);
     };
     makePingChart(["ping-96.120.104.221.json", "ping-1.1.1.1.json"], "plot-ping");
 
@@ -151,7 +155,10 @@ let refresh = function () {
         dataSets.push ([{ x: 0, y: 62}]);
 
         // create the actual plot
-        let svg = PlotSvg.setPlotPoints (false).multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
+        let svg = PlotSvg
+            .setColors (colors)
+            .setPlotPoints (false)
+            .multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-temperature");
