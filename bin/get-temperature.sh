@@ -43,8 +43,8 @@ do
     nowtimestamp=$(date +%s%3N);
     delta=$(( (10000-((nowtimestamp-starttimestamp) % 10000)) / 1000 ));
     if [ $delta -gt 0 ]; then
-      sleep $delta;
       echoerr "sleeping for $delta seconds";
+      sleep $delta;
     fi;
 done
 
