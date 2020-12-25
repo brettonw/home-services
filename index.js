@@ -150,7 +150,7 @@ let refresh = function () {
         dataSets.push ([{ x: 0, y: 52}]);
 
         // create the actual plot
-        let svg = PlotSvg.setPlotPoints (false).multipleLine("System Temperature", "Time (Minutes Ago)", "Temperature (Celsius)", dataSets);
+        let svg = PlotSvg.setPlotPoints (false).multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
 
         // size the display element, the graph itself has aspect 4:3
         let divElement = document.getElementById("plot-temperature");
