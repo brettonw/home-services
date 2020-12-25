@@ -151,8 +151,8 @@ let refresh = function () {
         }
 
         // add two data sets to set a range
-        dataSets.push ([{ x: 0, y: 46}]);
-        dataSets.push ([{ x: 0, y: 52}]);
+        dataSets.push ([{ x: 0, y: 48}]);
+        dataSets.push ([{ x: 0, y: 62}]);
 
         // create the actual plot
         let svg = PlotSvg.setPlotPoints (false).multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
