@@ -1,5 +1,8 @@
 # /usr/bin/env bash
 
+# define a logging function
+echoerr() { echo "$@" 1>&2; }
+
 # setup the log file
 targetDir="/var/lib/tomcat9/webapps/home-services";
 if [ ! -d "$targetDir/raw" ]; then
@@ -8,18 +11,19 @@ fi
 rawFile="$targetDir/raw/ping.raw";
 jsonFile="$targetDir/ping.json";
 
+# setup the script start time and the counter
+starttimestamp=$(date +%s%3N);
 counter=0;
 
 while :
 do
     # get the temperature with the timestamp and write it to the raw log
+    timestamp=$(date +%s%3N);
     roundTrip=$(ping -c 5 1.1.1.1 | grep "min/avg/max/mdev");
     case ${roundTrip+x$roundTrip} in
         (x*[![:space:]]*) roundTrip=$(echo $roundTrip | awk '{split($0,a," "); print a[4]}');;
-        (*) roundTrip="0/0/0";
+        (*) roundTrip="1000/1000/1000";
     esac
-
-    timestamp=$(date +%s%3N);
     echo "    , { \"timestamp\": $timestamp, \"roundTrip\": \"$roundTrip\" }" >> $rawFile;
 
     # once per minute, go ahead and consolidate the JSON output
@@ -39,7 +43,12 @@ do
         echo "]" >> $jsonFile;
     fi
 
-    # sleep for a little bit
-    sleep 10;
+    # sleep for a little bit (making the whole loop land on 10 second intervals)
+    nowtimestamp=$(date +%s%3N);
+    delta=$(( (10000-((nowtimestamp-starttimestamp) % 10000)) / 1000 ));
+    if [ $delta -gt 0 ]; then
+      sleep $delta;
+      echoerr "sleeping for $delta seconds";
+    fi;
 done
 

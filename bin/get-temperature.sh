@@ -1,5 +1,8 @@
 # /usr/bin/env bash
 
+# define a logging function
+echoerr() { echo "$@" 1>&2; }
+
 # setup the log file
 targetDir="/var/lib/tomcat9/webapps/home-services";
 if [ ! -d "$targetDir/raw" ]; then
@@ -8,13 +11,15 @@ fi
 rawFile="$targetDir/raw/temperature.raw";
 jsonFile="$targetDir/temperature.json";
 
+# setup the script start time and the counter
+starttimestamp=$(date +%s%3N);
 counter=0;
 
 while :
 do
     # get the temperature with the timestamp and write it to the raw log
-    temperature=$(cat /sys/class/thermal/thermal_zone0/temp);
     timestamp=$(date +%s%3N);
+    temperature=$(cat /sys/class/thermal/thermal_zone0/temp);
     echo "    , { \"timestamp\": $timestamp, \"temperature\": $temperature }" >> $rawFile;
 
     # once per minute, go ahead and consolidate the JSON output
@@ -34,7 +39,12 @@ do
         echo "]" >> $jsonFile;
     fi
 
-    # sleep for a little bit
-    sleep 10;
+    # sleep for a little bit (making the whole loop land on 10 second intervals)
+    nowtimestamp=$(date +%s%3N);
+    delta=$(( (10000-((nowtimestamp-starttimestamp) % 10000)) / 1000 ));
+    if [ $delta -gt 0 ]; then
+      sleep $delta;
+      echoerr "sleeping for $delta seconds";
+    fi;
 done
 
