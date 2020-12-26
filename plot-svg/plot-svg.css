@@ -1,0 +1,83 @@
+
+.plot-svg-div {
+    background-color:   #FF0000;
+    width:              100%;
+    height:             100%;
+    padding:            0;
+    margin:             0;
+    overflow:           hidden;
+    display:            block;
+}
+
+.plot-svg-svg {
+    background-color:   #f8f8f8;
+    width:              100%;
+    height:             100%;
+    padding:            0;
+    margin:             0;
+}
+
+.plot-svg-title {
+    font-size:          32px; 
+    font-family:        sans-serif;
+    fill:               #404040;
+    text-anchor:        middle;
+}
+
+.plot-svg-axis-label {
+    font-size:          24px; 
+    font-family:        sans-serif;
+    fill:               #404040;
+    text-anchor:        middle;
+
+}
+
+.plot-svg-tick-line {
+    stroke:             #c0c0c0;
+    stroke-width:       0.5px;
+}
+
+.plot-svg-x-tick-label {
+    font-size:          16px; 
+    font-family:        sans-serif;
+    fill:               #808080;
+    text-anchor:        middle;
+}
+
+.plot-svg-y-tick-label {
+    font-size:          16px; 
+    font-family:        sans-serif;
+    fill:               #808080;
+    text-anchor:        end;
+}
+
+.plot-svg-plot-line {
+    fill:               none;
+    stroke-width:       2.0px;
+}
+
+.plot-svg-plot-point {
+    stroke:black;
+    stroke-width: 1.0px;
+    r:4;
+}
+
+.plot-svg-plot-legend {
+    stroke:black;
+    fill:floralwhite;
+    stroke-width: 2.0px;
+    width:200px;
+    fill-opacity: 0.85;
+}
+
+.plot-svg-plot-legend-box {
+    stroke:black;
+    stroke-width: 1.0px;
+}
+
+.plot-svg-plot-legend-label {
+    font-size: 16px;
+    font-family: sans-serif;
+    fill: black;
+}
+
