@@ -48,6 +48,8 @@ let refresh = function () {
     let colors = ["rgb(114,147,203)", "rgb(132,186,91)", "rgb(225,151,76)"];
 
     let nowTime = Date.now(); //response[0].timestamp;
+    let nowDate = new Date (nowTime);
+    document.getElementById("div-time").innerText = nowDate.toLocaleDateString() + " " + nowDate.toLocaleTimeString();
 
     let digestSource = function (source, key) {
         let dataSet = [];
