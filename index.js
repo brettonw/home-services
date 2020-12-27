@@ -196,9 +196,17 @@ let refresh = function () {
             .multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
 
         // size the display element, the graph itself has aspect 4:3
-        let divElement = document.getElementById("plot-temperature-chart");
-        divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
-        divElement.innerHTML = svg;
+        let chartDivElement = document.getElementById("plot-temperature-chart");
+        chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
+        chartDivElement.innerHTML = svg;
+
+        // create the temperature wheel element
+        let wheelDivElement = document.getElementById("plot-temperature-wheel-exterior");
+        wheelDivElement.style.height = chartDivElement.style.height;
+        let wheelDivInteriorElement = document.getElementById("plot-temperature-wheel-interior");
+        wheelDivInteriorElement.innerHTML = "";
+        wheelDivInteriorElement.appendChild(makeWheel(100, wheelDivElement.clientWidth));
+
     });
 
     // refresh at the beginning of every minute
