@@ -20,22 +20,26 @@
         }
         .plotShellInterior {
             display: inline-block;
-            width: 38%;
+            width: 40%;
             border: solid;
             border-width: 1px;
             border-radius: 2px;
             border-color: #bbb;
             margin: 0 4px 0 0;
         }
-        .wheelInterior {
+        .wheelExterior {
             display: inline-block;
-            width: 10%;
-            border: solid;
-            border-width: 1px;
-            border-radius: 2px;
-            border-color: #bbb;
+            position: relative;
+            width: 8%;
             margin: 0 4px 0 0;
-            vertical-align: top;
+            padding: 0;
+        }
+        .wheelInterior {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 100%;
+            padding: 0;
         }
         .docBox {
             padding: 8px;
@@ -51,10 +55,10 @@
         <h1 style="display: inline-block; height: 32px; margin: 10px 0;" >Home Services</h1>
         <div id="div-time" style="float: right; height: 32px; line-height: 32px; margin: 10px 0; vertical-align: center;">TIME</div>
 
-        <div class="plotShell" id="plotShell"><div class="wheelInterior" id="plot-ping-wheel">
-            </div><div class="plotShellInterior" id="plot-ping-chart">
-            </div><div class="wheelInterior" id="plot-temperature-wheel">
-            </div><div class="plotShellInterior" id="plot-temperature-chart">
+        <div class="plotShell" id="plotShell"><div class="wheelExterior" id="plot-ping-wheel-exterior"><div class="wheelInterior" id="plot-ping-wheel-interior">
+            </div></div><div class="plotShellInterior" id="plot-ping-chart">
+            </div><div class="wheelExterior" id="plot-temperature-wheel-exterior"><div class="wheelInterior" id="plot-temperature-wheel-interior">
+            </div></div><div class="plotShellInterior" id="plot-temperature-chart">
         </div></div>
 
         <div class="plotShell">

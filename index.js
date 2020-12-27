@@ -77,8 +77,21 @@ let refresh = function () {
         return dataSet;
     };
 
-    let makeWheel = function (value) {
-        return "<div>" + value + "</div>";
+    let makeWheel = function (value, parentWidth) {
+        let size = parentWidth * 0.98;
+        let offset = (parentWidth - size) / 2;
+        let radius = size / 2;
+        let center = offset + radius;
+        let textSize = radius * 0.85;
+        let element = Bedrock.Html.Builder
+            .begin("div", { style: { width: "100%", margin: "0 auto" } })
+                .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: center, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: center, r: radius * 0.85, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: center, fill: "black", "font-size": textSize + "px", "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
+                .end ()
+            .end ();
+        return element;
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
@@ -86,6 +99,9 @@ let refresh = function () {
         let legend = [];
         let pingColors = [];
         let pingWheels = [];
+
+        let wheelDivElement = document.getElementById("plot-ping-wheel-exterior");
+
 
         let asyncGatherChart = function (sourceUrlIndex) {
             if (sourceUrls.length > sourceUrlIndex) {
@@ -112,7 +128,7 @@ let refresh = function () {
                     }
 
                     // make a ping wheel
-                    pingWheels.push (makeWheel (100));
+                    pingWheels.push (makeWheel (100, wheelDivElement.clientWidth));
 
                     // recur until we've read all the sources
                     asyncGatherChart(sourceUrlIndex + 1);
@@ -135,9 +151,11 @@ let refresh = function () {
                 chartDivElement.innerHTML = svg;
 
                 // add the wheels
-                let wheelDivElement = document.getElementById(wheelElementId);
                 wheelDivElement.style.height = chartDivElement.style.height;
-                wheelDivElement.innerHTML = "<div>" + pingWheels[0] + "</div><div>" + pingWheels[1] + "</div>";
+
+                let wheelDivInteriorElement = document.getElementById("plot-ping-wheel-interior");
+                wheelDivInteriorElement.innerHTML = "";
+                wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);
 
                 let plotShellElemenet = document.getElementById("plotShell");
                 plotShellElemenet.style.height = chartDivElement.style.height;
