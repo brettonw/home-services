@@ -156,8 +156,8 @@ let refresh = function () {
                 wheelDivInteriorElement.innerHTML = "";
                 wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);
 
-                let plotShellElemenet = document.getElementById("plotShell");
-                plotShellElemenet.style.height = chartDivElement.style.height;
+                let plotShellElement = document.getElementById("plot-shell-ping");
+                plotShellElement.style.height = chartDivElement.style.height;
             }
         };
         asyncGatherChart(0);
@@ -207,6 +207,8 @@ let refresh = function () {
         wheelDivInteriorElement.innerHTML = "";
         wheelDivInteriorElement.appendChild(makeWheel(100, wheelDivElement.clientWidth));
 
+        let plotShellElement = document.getElementById("plot-shell-temperature");
+        plotShellElement.style.height = chartDivElement.style.height;
     });
 
     // refresh at the beginning of every minute
