@@ -77,10 +77,15 @@ let refresh = function () {
         return dataSet;
     };
 
-    let makePingChart = function (sourceUrls, elementId) {
+    let makeWheel = function (value) {
+        return "<div>" + value + "</div>";
+    };
+
+    let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
         let dataSets = [];
         let legend = [];
         let pingColors = [];
+        let pingWheels = [];
 
         let asyncGatherChart = function (sourceUrlIndex) {
             if (sourceUrls.length > sourceUrlIndex) {
@@ -106,6 +111,9 @@ let refresh = function () {
                         }
                     }
 
+                    // make a ping wheel
+                    pingWheels.push (makeWheel (100));
+
                     // recur until we've read all the sources
                     asyncGatherChart(sourceUrlIndex + 1);
                 });
@@ -122,14 +130,22 @@ let refresh = function () {
                     .multipleLine("Ping", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
                 // size the display element, the graph itself has aspect 4:3
-                let divElement = document.getElementById(elementId);
-                divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
-                divElement.innerHTML = svg;
+                let chartDivElement = document.getElementById(chartElementId);
+                chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
+                chartDivElement.innerHTML = svg;
+
+                // add the wheels
+                let wheelDivElement = document.getElementById(wheelElementId);
+                wheelDivElement.style.height = chartDivElement.style.height;
+                wheelDivElement.innerHTML = "<div>" + pingWheels[0] + "</div><div>" + pingWheels[1] + "</div>";
+
+                let plotShellElemenet = document.getElementById("plotShell");
+                plotShellElemenet.style.height = chartDivElement.style.height;
             }
         };
         asyncGatherChart(0);
     };
-    makePingChart(["ping-96.120.104.221.json", "ping-1.1.1.1.json"], "plot-ping");
+    makePingChart(["ping-96.120.104.221.json", "ping-1.1.1.1.json"], "plot-ping-chart", "plot-ping-wheel");
 
 
     Bedrock.Http.get(temperatureDataSourceUrl, (response) => {
@@ -163,7 +179,7 @@ let refresh = function () {
             .multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
 
         // size the display element, the graph itself has aspect 4:3
-        let divElement = document.getElementById("plot-temperature");
+        let divElement = document.getElementById("plot-temperature-chart");
         divElement.style.height = (divElement.offsetWidth * 3 / 5) + "px";
         divElement.innerHTML = svg;
     });

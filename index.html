@@ -15,24 +15,34 @@
         }
         .plotShell {
             width: 100%;
-            margin: 0 auto;
+            margin: 0 auto 6px;
             padding: 0;
         }
         .plotShellInterior {
             display: inline-block;
-            width: 48%;
+            width: 38%;
             border: solid;
             border-width: 1px;
             border-radius: 2px;
             border-color: #bbb;
-            margin: 0 8px;
+            margin: 0 4px 0 0;
+        }
+        .wheelInterior {
+            display: inline-block;
+            width: 10%;
+            border: solid;
+            border-width: 1px;
+            border-radius: 2px;
+            border-color: #bbb;
+            margin: 0 4px 0 0;
+            vertical-align: top;
         }
         .docBox {
             padding: 8px;
             width: 32%;
             height: 200px;
             vertical-align: top;
-            margin: 0 0 0 7px;
+            margin: 0 6px 0 0;
             background-color: #fff8ed;
         }
     </style>
@@ -40,10 +50,12 @@
     <body>
         <h1 style="display: inline-block; height: 32px; margin: 10px 0;" >Home Services</h1>
         <div id="div-time" style="float: right; height: 32px; line-height: 32px; margin: 10px 0; vertical-align: center;">TIME</div>
-        <div class="plotShell">
-            <div class="plotShellInterior" id="plot-ping"></div>
-            <div class="plotShellInterior" id="plot-temperature"></div>
-        </div>
+
+        <div class="plotShell" id="plotShell"><div class="wheelInterior" id="plot-ping-wheel">
+            </div><div class="plotShellInterior" id="plot-ping-chart">
+            </div><div class="wheelInterior" id="plot-temperature-wheel">
+            </div><div class="plotShellInterior" id="plot-temperature-chart">
+        </div></div>
 
         <div class="plotShell">
             <div class="plotShellInterior docBox">
@@ -52,9 +64,7 @@
                     <li><a href="https://unifi-cloudkey-gen2:8443/manage/site/default/dashboard">Unifi Network Dashboard</a></li>
                     <li><a href="http://home-services.local:8123">Home Assistant</a></li>
                 </ul>
-            </div>
-
-            <div class="plotShellInterior docBox">
+            </div><div class="plotShellInterior docBox">
                 <h3>Secondary Dashboards</h3>
                 <ul>
                     <li><a href="https://unifi-cloudkey-gen2/">Unifi Cloud Key Network Controller</a></li>
@@ -63,9 +73,7 @@
                     <li><a href="http://home-services.local:3001">Infinitude - Main Level</a></li>
                     <li><a href="http://home-services.local:3002">Infinitude - Upstairs</a></li>
                 </ul>
-            </div>
-
-            <div class="plotShellInterior docBox">
+            </div><div class="plotShellInterior docBox">
                 <h3>Documentation</h3>
                 <ul>
                     <li><a href="http://home-services.local:8080/BAK">Tomcat 9 configuration</a></li>
