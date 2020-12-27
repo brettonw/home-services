@@ -84,11 +84,11 @@ let refresh = function () {
         let center = offset + radius;
         let textSize = radius * 0.85;
         let element = Bedrock.Html.Builder
-            .begin("div", { style: { width: "100%", margin: "0 auto" } })
+            .begin("div", { style: { width: "100%", margin: "0 auto 8px" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: center, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: center, r: radius * 0.85, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: center, fill: "black", "font-size": textSize + "px", "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius * 0.85, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: radius, fill: "black", "font-size": textSize + "px", "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
                 .end ()
             .end ();
         return element;
@@ -152,7 +152,6 @@ let refresh = function () {
 
                 // add the wheels
                 wheelDivElement.style.height = chartDivElement.style.height;
-
                 let wheelDivInteriorElement = document.getElementById("plot-ping-wheel-interior");
                 wheelDivInteriorElement.innerHTML = "";
                 wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);
