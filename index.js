@@ -82,12 +82,12 @@ let refresh = function () {
         let offset = (parentWidth - size) / 2;
         let radius = size / 2;
         let center = offset + radius;
-        let textSize = radius * 0.85;
+        let textSize = radius * 0.7;
         let element = Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0 auto 8px" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius * 0.85, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius * 0.8, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
                     .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: radius, fill: "black", "font-size": textSize + "px", "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
                 .end ()
             .end ();
@@ -100,7 +100,7 @@ let refresh = function () {
         let pingColors = [];
         let pingWheels = [];
 
-        let wheelDivElement = document.getElementById("plot-ping-wheel-exterior");
+        let wheelDivElement = document.getElementById("plot-ping-wheel");
 
 
         let asyncGatherChart = function (sourceUrlIndex) {
@@ -147,11 +147,11 @@ let refresh = function () {
 
                 // size the display element, the graph itself has aspect 4:3
                 let chartDivElement = document.getElementById(chartElementId);
-                chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
+                //chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
                 chartDivElement.innerHTML = svg;
 
                 // add the wheels
-                wheelDivElement.style.height = chartDivElement.style.height;
+                //wheelDivElement.style.height = chartDivElement.style.height;
                 let wheelDivInteriorElement = document.getElementById("plot-ping-wheel-interior");
                 wheelDivInteriorElement.innerHTML = "";
                 wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);

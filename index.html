@@ -13,6 +13,17 @@
             width: 90%;
             max-width: 1200px;
         }
+        .wheelPlotOuterShell {
+            position: relative;
+            padding-bottom: 60%;
+        }
+        .wheelPlotInnerShell {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
         .plotShell {
             display: flex;
             margin: 0 0 8px 0;
@@ -63,6 +74,10 @@
         <div id="div-time" style="float: right; height: 32px; line-height: 32px; margin: 10px 0; vertical-align: center;">TIME</div>
         </div>
 
+        <div class="wheelPlotOuterShell"><div class="wheelPlotInnerShell"><div id="plot-ping-wheel"></div><div id="plot-ping-chart"></div></div></div>
+        <div class="wheelPlotOuterShell"><div class="wheelPlotInnerShell"><div id="plot-temperature-wheel"></div><div id="plot-temperature-chart"></div></div></div>
+
+<!--
         <div style="display: inline-block; vertical-align: top; width: 65%; margin: 0;">
             <div class="plotShell" id="plot-shell-ping"><div class="wheelExterior" id="plot-ping-wheel-exterior"><div class="wheelInterior" id="plot-ping-wheel-interior">
                 </div></div><div class="plotShellInterior" id="plot-ping-chart">
@@ -70,7 +85,9 @@
             <div class="plotShell" id="plot-shell-temperature"><div class="wheelExterior" id="plot-temperature-wheel-exterior"><div class="wheelInterior" id="plot-temperature-wheel-interior">
                 </div></div><div class="plotShellInterior" id="plot-temperature-chart">
                 </div></div>
-        </div><div style="display: inline-block; vertical-align: top; width: 35%; margin: 0;"><div>
+        </div>
+        -->
+        <div style="display: inline-block; vertical-align: top; width: 35%; margin: 0;"><div>
             <div class="docBox">
                 <h3>Primary Dashboards</h3>
                 <ul>
