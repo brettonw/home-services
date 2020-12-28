@@ -85,7 +85,7 @@ let refresh = function () {
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#bbb", "stroke-width": 0.01, fill: "red" } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#bbb", "stroke-width": 0.01, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0.0666, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "middle" }, innerHTML: value })
                 .end ()
             .end ();
         return element;
