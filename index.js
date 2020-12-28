@@ -122,11 +122,9 @@ let refresh = function () {
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } })
                     .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: 0, dy: "12%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "end" }, innerHTML: v1 })
                     .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: 0, dy: "8%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.4, "text-anchor": "start" }, innerHTML: v2 })
-            .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0, dy: "50%", fill: "purple", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "start" }, innerHTML: "0000000000" })
-            .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0, dy: "50%", fill: "green", "font-family": "Helvetica, Arial", "font-size": 0.4, "text-anchor": "start" }, innerHTML: "0000000000" })
-            .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -1, y1: 0, x2: 1, y2: 0, "stroke-width": 0.025, stroke: "black" } })
                 .end ()
             .end ();
     };
