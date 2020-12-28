@@ -24,6 +24,8 @@ let makeScale = function () {
 };
 makeScale ();
 
+document.getElementById("bodysize").innerHTML = document.body.clientWidth + " x " + document.body.clientHeight;
+
 let refresh = function () {
     // timestamps are in seconds or ms, but we always want ms
     let conditionTime = function (t) {
