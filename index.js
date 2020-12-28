@@ -78,17 +78,17 @@ let refresh = function () {
     };
 
     let makeWheel = function (value, parentWidth) {
-        let size = parentWidth * 0.98;
-        let offset = (parentWidth - size) / 2;
-        let radius = size / 2;
-        let center = offset + radius;
-        let textSize = radius * 0.7;
+        let size = "98%";
+        let offset = "1%";
+        let radius = "49%";
+        let center = "50%";
+        let textSize = "100%";
         let element = Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0 auto" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius * 0.8, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: radius, fill: "black", "font-size": textSize + "px", "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: "39%", stroke: "#bbb", "stroke-width": 1, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: radius, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
                 .end ()
             .end ();
         return element;
@@ -147,17 +147,12 @@ let refresh = function () {
 
                 // size the display element, the graph itself has aspect 4:3
                 let chartDivElement = document.getElementById(chartElementId);
-                //chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
                 chartDivElement.innerHTML = svg;
 
                 // add the wheels
-                //wheelDivElement.style.height = chartDivElement.style.height;
-                let wheelDivInteriorElement = document.getElementById("plot-ping-wheel-interior");
+                let wheelDivInteriorElement = document.getElementById("plot-ping-wheel");
                 wheelDivInteriorElement.innerHTML = "";
                 wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);
-
-                let plotShellElement = document.getElementById("plot-shell-ping");
-                plotShellElement.style.height = chartDivElement.style.height;
             }
         };
         asyncGatherChart(0);
@@ -197,7 +192,6 @@ let refresh = function () {
 
         // size the display element, the graph itself has aspect 4:3
         let chartDivElement = document.getElementById("plot-temperature-chart");
-        chartDivElement.style.height = Math.floor (chartDivElement.offsetWidth * 3 / 5) + "px";
         chartDivElement.innerHTML = svg;
 
         // create the temperature wheel element
