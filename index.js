@@ -100,13 +100,14 @@ let refresh = function () {
     };
 
     let makeWheel = function (value, min, max) {
-        let v1 = Math.floor (value).toString();
-        let v2 = Math.round ((value - v1) * 10).toString();
+        value = Math.round (value * 10) / 10;
+        let v1 = Math.floor (value);
+        let v2 = Math.floor ((value - v1) * 10);
         // determined roughly by experimentation
         const v1CharWidth = 1 / 2.75;
         const v2CharWidth = (1 / 4.5);
         const v2CharSpacing = 0.05;
-        let overallWidth = (v1CharWidth * v1.length) + 1.25 * (v2CharSpacing + v2CharWidth);
+        let overallWidth = (v1CharWidth * v1.toString ().length) + 1.25 * (v2CharSpacing + v2CharWidth);
         let right = (overallWidth / 2) - (v2CharSpacing + v2CharWidth);
         let radius = 0.95;
 
