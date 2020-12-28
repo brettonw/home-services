@@ -148,8 +148,8 @@ let refresh = function () {
                         // input data to make the first sample be the latest one
                         response.reverse();
 
-                        // make a ping wheel
-                        pingWheels.push(makeWheel(response[0].roundTrip.split("/")[1], 10, 80));
+                        // grab the current index into the datasets
+                        let dataSetsIndex = dataSets.length;
 
                         // loop over all of the source sets
                         for (let source of splitSource(response)) {
@@ -166,6 +166,11 @@ let refresh = function () {
                             if (dataSet.length > 0) {
                                 dataSets.push(dataSet);
                             }
+                        }
+
+                        // make a ping wheel
+                        if (dataSets.length > dataSetsIndex) {
+                            pingWheels.push(makeWheel(dataSets[dataSetsIndex][0].y, 10, 80));
                         }
 
                         // recur until we've read all the sources
@@ -205,11 +210,6 @@ let refresh = function () {
         response.reverse ();
         if (response.length > 0) {
 
-            // create the temperature wheel element
-            let wheelDivElement = document.getElementById("plot-temperature-wheel");
-            wheelDivElement.innerHTML = "";
-            wheelDivElement.appendChild(makeWheel(response[0].temperature / 1000, 45, 85));
-
             // create the data set to display
             let sources = splitSource(response);
             let dataSets = [];
@@ -225,6 +225,11 @@ let refresh = function () {
             // add two data sets to set a range
             dataSets.push([{x: 0, y: 48}]);
             dataSets.push([{x: 0, y: 62}]);
+
+            // create the temperature wheel element
+            let wheelDivElement = document.getElementById("plot-temperature-wheel");
+            wheelDivElement.innerHTML = "";
+            wheelDivElement.appendChild(makeWheel(dataSets[0][0].y, 45, 85));
 
             // create the actual plot
             let svg = PlotSvg
