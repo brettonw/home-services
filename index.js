@@ -121,8 +121,8 @@ let refresh = function () {
                     .end ()
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: -0.075, fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "end", "dominant-baseline": "central" }, innerHTML: v1 })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: -0.075, fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "start", "dominant-baseline": "central" }, innerHTML: v2 })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: 0, fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "end", "dominant-baseline": "central" }, innerHTML: v1 })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: 0, fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "start", "dominant-baseline": "central" }, innerHTML: v2 })
                 .end ()
             .end ();
     };
