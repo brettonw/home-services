@@ -2,6 +2,28 @@
 
 const temperatureDataSourceUrl = "temperature.json";
 
+let computeColor = function (value, min, max) {
+    let sq = function (x) { return Math.sqrt (x); };
+    let interpolant = (value - min) / (max - min);
+    interpolant = Math.min (1, Math.max (0, interpolant));
+    let rValue = Math.floor (255 * ((interpolant < 0.5) ? sq (interpolant * 2) : 1));
+    let gValue = Math.floor (255 * ((interpolant > 0.5) ? sq(1 - ((interpolant * 2) - 1)) : 1));
+    return "rgb(" + rValue + "," + gValue + ",0)";
+};
+
+let makeScale = function () {
+    let element = document.getElementById("scaleBar");
+    let height = element.clientHeight / element.clientWidth;
+    let builder = Bedrock.Html.Builder.begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", height: "100%", viewBox: "0 0 1 " + height },  style: { margin: "0", display: "block" } });
+    const divisions = 50;
+    let scale = 1 / divisions;
+    for (let i = 0; i < divisions; ++i) {
+        builder.add ("http://www.w3.org/2000/svg;rect", { attributes: { x: i * scale, y: 0, width: scale, height: height, fill: computeColor (i * scale, 0, 1) } });
+    }
+    document.getElementById("scaleBar").appendChild(builder.end ());
+};
+makeScale ();
+
 let refresh = function () {
     // timestamps are in seconds or ms, but we always want ms
     let conditionTime = function (t) {
@@ -77,18 +99,28 @@ let refresh = function () {
         return dataSet;
     };
 
-    let makeWheel = function (value, parentWidth) {
+    let makeWheel = function (value, min, max) {
+        let v1 = Math.floor (value).toString();
+        let v2 = Math.round ((value - v1) * 10).toString();
+        // determined roughly by experimentation
+        const v1CharWidth = 1 / 2.75;
+        const v2CharWidth = (1 / 4.5);
+        const v2CharSpacing = 0.05;
+        let overallWidth = (v1CharWidth * v1.length) + 1.25 * (v2CharSpacing + v2CharWidth);
+        let right = (overallWidth / 2) - (v2CharSpacing + v2CharWidth);
         let radius = 0.95;
-        let textSize = 0.666;
-        let element = Bedrock.Html.Builder
+
+        // compute the color of the ring
+        let color = computeColor (value, min, max);
+        return Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#bbb", "stroke-width": 0.01, fill: "red" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#bbb", "stroke-width": 0.01, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "middle" }, innerHTML: value })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color } })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: -0.25, fill: "black", "font-family": "tahoma", "font-size": 0.65, "text-anchor": "end", "dominant-baseline": "hanging" }, innerHTML: v1 })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: -0.25, fill: "black", "font-family": "tahoma", "font-size": 0.4, "text-anchor": "start", "dominant-baseline": "hanging" }, innerHTML: v2 })
                 .end ()
             .end ();
-        return element;
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
@@ -98,37 +130,41 @@ let refresh = function () {
         let pingWheels = [];
 
         let wheelDivElement = document.getElementById("plot-ping-wheel");
-
+        wheelDivElement.innerHTML = "";
 
         let asyncGatherChart = function (sourceUrlIndex) {
             if (sourceUrls.length > sourceUrlIndex) {
                 Bedrock.Http.get(sourceUrls[sourceUrlIndex], (response) => {
                     // the first element is always (0, 0)
                     let info = response.shift();
+                    if (response.length > 0) {
+                        // the times need to be expressed as minutes ago, so we start by reversing the
+                        // input data to make the first sample be the latest one
+                        response.reverse();
 
-                    // the times need to be expressed as minutes ago, so we start by reversing the
-                    // input data to make the first sample be the latest one
-                    response.reverse();
+                        // make a ping wheel
+                        pingWheels.push(makeWheel(response[0].roundTrip.split("/")[1], 10, 80));
 
-                    // loop over all of the source sets
-                    for (let source of splitSource(response)) {
-                        // only push a legend entry once
-                        legend.push (info.target);
-                        pingColors.push (colors[sourceUrlIndex % colors.length]);
-                        info.target = "";
+                        // loop over all of the source sets
+                        for (let source of splitSource(response)) {
+                            // only push a legend entry once
+                            legend.push(info.target);
+                            pingColors.push(colors[sourceUrlIndex % colors.length]);
+                            info.target = "";
 
-                        // loop over all the data to add them to the dataSets
-                        let dataSet = digestSource (source.map ( a => ({ timestamp: a.timestamp, avg: a.roundTrip.split("/")[1] }) ), "avg");
-                        if (dataSet.length > 0) {
-                            dataSets.push (dataSet);
+                            // loop over all the data to add them to the dataSets
+                            let dataSet = digestSource(source.map(a => ({
+                                timestamp: a.timestamp,
+                                avg: a.roundTrip.split("/")[1]
+                            })), "avg");
+                            if (dataSet.length > 0) {
+                                dataSets.push(dataSet);
+                            }
                         }
+
+                        // recur until we've read all the sources
+                        asyncGatherChart(sourceUrlIndex + 1);
                     }
-
-                    // make a ping wheel
-                    pingWheels.push (makeWheel (100, wheelDivElement.clientWidth));
-
-                    // recur until we've read all the sources
-                    asyncGatherChart(sourceUrlIndex + 1);
                 });
             } else {
                 // add two data sets to set a nominal range
@@ -142,14 +178,11 @@ let refresh = function () {
                     .setLegendPosition(480, 360)
                     .multipleLine("Ping", "Time (minutes ago)", "Round Trip (ms)", dataSets, legend);
 
-                // size the display element, the graph itself has aspect 4:3
-                let chartDivElement = document.getElementById(chartElementId);
-                chartDivElement.innerHTML = svg;
+                // add the graph
+                document.getElementById(chartElementId).innerHTML = svg;
 
-                // add the wheels
-                let wheelDivInteriorElement = document.getElementById("plot-ping-wheel");
-                wheelDivInteriorElement.innerHTML = "";
-                pingWheels.forEach( pingWheel => wheelDivInteriorElement.appendChild(pingWheel) )
+                // add the wheels in reverse order
+                pingWheels.reverse ().forEach( pingWheel => wheelDivElement.appendChild(pingWheel) )
             }
         };
         asyncGatherChart(0);
@@ -164,37 +197,38 @@ let refresh = function () {
         // the times need to be expressed as minutes ago, so we start by reversing the
         // input data to make the first sample be the latest one
         response.reverse ();
+        if (response.length > 0) {
 
-        // create the data set to display
-        let sources = splitSource (response);
-        let dataSets = [];
+            // create the temperature wheel element
+            let wheelDivElement = document.getElementById("plot-temperature-wheel");
+            wheelDivElement.innerHTML = "";
+            wheelDivElement.appendChild(makeWheel(response[0].temperature / 1000, 45, 85));
 
-        // loop over all of the source sets
-        for (let source of sources) {
-            let dataSet = digestSource (source, "temperature");
-            if (dataSet.length > 0) {
-                dataSets.push (dataSet.map (a => ({ x: a.x, y: a.y / 1000 })));
+            // create the data set to display
+            let sources = splitSource(response);
+            let dataSets = [];
+
+            // loop over all of the source sets
+            for (let source of sources) {
+                let dataSet = digestSource(source, "temperature");
+                if (dataSet.length > 0) {
+                    dataSets.push(dataSet.map(a => ({x: a.x, y: a.y / 1000})));
+                }
             }
+
+            // add two data sets to set a range
+            dataSets.push([{x: 0, y: 48}]);
+            dataSets.push([{x: 0, y: 62}]);
+
+            // create the actual plot
+            let svg = PlotSvg
+                .setColors(colors)
+                .setPlotPoints(false)
+                .multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
+
+            // add the graph
+            document.getElementById("plot-temperature-chart").innerHTML = svg;
         }
-
-        // add two data sets to set a range
-        dataSets.push ([{ x: 0, y: 48}]);
-        dataSets.push ([{ x: 0, y: 62}]);
-
-        // create the actual plot
-        let svg = PlotSvg
-            .setColors (colors)
-            .setPlotPoints (false)
-            .multipleLine("System Temperature", "Time (minutes ago)", "Temperature (°C)", dataSets);
-
-        // size the display element, the graph itself has aspect 4:3
-        let chartDivElement = document.getElementById("plot-temperature-chart");
-        chartDivElement.innerHTML = svg;
-
-        // create the temperature wheel element
-        let wheelDivElement = document.getElementById("plot-temperature-wheel");
-        wheelDivElement.innerHTML = "";
-        wheelDivElement.appendChild(makeWheel(100, wheelDivElement.clientWidth));
     });
 
     // refresh at the beginning of every minute
