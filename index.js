@@ -78,17 +78,14 @@ let refresh = function () {
     };
 
     let makeWheel = function (value, parentWidth) {
-        let size = "98%";
-        let offset = "1%";
-        let radius = "49%";
-        let center = "50%";
-        let textSize = "100%";
+        let radius = 0.95;
+        let textSize = 0.666;
         let element = Bedrock.Html.Builder
-            .begin("div", { style: { width: "100%", margin: "0 auto" } })
-                .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
-            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: "39%", stroke: "#bbb", "stroke-width": 1, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: center, y: radius, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
+            .begin("div", { style: { width: "100%", margin: "0", "font-size": 0 } })
+                .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", "vertical-alignment": "top", display: "block" } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#bbb", "stroke-width": 0.01, fill: "red" } })
+            .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#bbb", "stroke-width": 0.01, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: 0, y: 0, fill: "black", "font-size": textSize, "text-anchor": "middle", "dominant-baseline": "central" }, innerHTML: value })
                 .end ()
             .end ();
         return element;
@@ -152,7 +149,7 @@ let refresh = function () {
                 // add the wheels
                 let wheelDivInteriorElement = document.getElementById("plot-ping-wheel");
                 wheelDivInteriorElement.innerHTML = "";
-                wheelDivInteriorElement.appendChild( pingWheels[0]).appendChild(pingWheels[1]);
+                pingWheels.forEach( pingWheel => wheelDivInteriorElement.appendChild(pingWheel) )
             }
         };
         asyncGatherChart(0);
