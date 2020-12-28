@@ -84,7 +84,7 @@ let refresh = function () {
         let center = offset + radius;
         let textSize = radius * 0.7;
         let element = Bedrock.Html.Builder
-            .begin("div", { style: { width: "100%", margin: "0 auto 8px" } })
+            .begin("div", { style: { width: "100%", margin: "0 auto" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: parentWidth, height: parentWidth } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius, stroke: "#bbb", "stroke-width": 1, fill: "red" } })
             .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: center, cy: radius, r: radius * 0.8, stroke: "#bbb", "stroke-width": 1, fill: "white" } })
@@ -201,14 +201,9 @@ let refresh = function () {
         chartDivElement.innerHTML = svg;
 
         // create the temperature wheel element
-        let wheelDivElement = document.getElementById("plot-temperature-wheel-exterior");
-        wheelDivElement.style.height = chartDivElement.style.height;
-        let wheelDivInteriorElement = document.getElementById("plot-temperature-wheel-interior");
-        wheelDivInteriorElement.innerHTML = "";
-        wheelDivInteriorElement.appendChild(makeWheel(100, wheelDivElement.clientWidth));
-
-        let plotShellElement = document.getElementById("plot-shell-temperature");
-        plotShellElement.style.height = chartDivElement.style.height;
+        let wheelDivElement = document.getElementById("plot-temperature-wheel");
+        wheelDivElement.innerHTML = "";
+        wheelDivElement.appendChild(makeWheel(100, wheelDivElement.clientWidth));
     });
 
     // refresh at the beginning of every minute
