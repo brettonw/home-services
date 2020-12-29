@@ -124,7 +124,7 @@ let refresh = function () {
                 .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + spacing, y: baseline, dy: dy2, fill: color, "font-family": "Helvetica, Arial", "font-size": size2, "text-anchor": "start" }, innerHTML: v2 })
         };
 
-        let radius = 0.95;
+        let radius = 0.96;
         let builder = Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
