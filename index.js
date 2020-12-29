@@ -104,24 +104,34 @@ let refresh = function () {
     };
 
     let makeWheel = function (value, min, max) {
+
+        // compute the color of the ring
+        let color1, color2;
+        if (Array.isArray(value)) {
+            color1 = computeColor (value[0], min, max);
+            color2 = computeColor (value[1], min, max);
+            value = value[1];
+        } else {
+            color1 = color2 = computeColor (value, min, max);
+        }
+
         value = Math.round (value * 10) / 10;
         let v1 = Math.floor (value);
         let v2 = Math.floor ((value - v1) * 10);
         // determined roughly by experimentation
         const v1CharWidth = 1 / 2.75;
         const v2CharWidth = (1 / 4.5);
-        const v2CharSpacing = 0.05;
-        let overallWidth = (v1CharWidth * v1.toString ().length) + 1.25 * (v2CharSpacing + v2CharWidth);
+        const v2CharSpacing = 0;
+        let overallWidth = (v1CharWidth * v1.toString ().length) + 1.33 * (v2CharSpacing + v2CharWidth);
         let right = (overallWidth / 2) - (v2CharSpacing + v2CharWidth);
         let radius = 0.95;
 
-        // compute the color of the ring
-        let color = computeColor (value, min, max);
         return Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
-                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color } })
-                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.8, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color1 } })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.875, fill: color2 } })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.75, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
                     .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } })
                     .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: 0, dy: "12%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "end" }, innerHTML: v1 })
                     .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: 0, dy: "8%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.4, "text-anchor": "start" }, innerHTML: v2 })
@@ -136,7 +146,6 @@ let refresh = function () {
         let pingWheels = [];
 
         let wheelDivElement = document.getElementById("plot-ping-wheel");
-        wheelDivElement.innerHTML = "";
 
         let asyncGatherChart = function (sourceUrlIndex) {
             if (sourceUrls.length > sourceUrlIndex) {
@@ -170,7 +179,17 @@ let refresh = function () {
 
                         // make a ping wheel
                         if (dataSets.length > dataSetsIndex) {
-                            pingWheels.push(makeWheel(dataSets[dataSetsIndex][0].y, 10, 80));
+                            // compute the average over the last 30 minutes
+                            let data = dataSets[dataSetsIndex];
+                            let redux = data.reduce ( function (redux, value) {
+                                if (value.x < 30) {
+                                    redux.sum += value.y;
+                                    redux.count++;
+                                }
+                                return redux;
+                            }, { sum: 0, count: 0 } );
+                            let average = (redux.count > 0) ? (redux.sum / redux.count) : 0;
+                            pingWheels.push(makeWheel([average, dataSets[dataSetsIndex][0].y], 10, 80));
                         }
 
                         // recur until we've read all the sources
@@ -193,7 +212,8 @@ let refresh = function () {
                 document.getElementById(chartElementId).innerHTML = svg;
 
                 // add the wheels in reverse order
-                pingWheels.reverse ().forEach( pingWheel => wheelDivElement.appendChild(pingWheel) )
+                wheelDivElement.innerHTML = "";
+                pingWheels.reverse ().forEach( pingWheel => wheelDivElement.appendChild(pingWheel) );
             }
         };
         asyncGatherChart(0);
