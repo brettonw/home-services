@@ -128,8 +128,8 @@ let refresh = function () {
         let builder = Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
-                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M -" + radius + " 0 a " + radius + " " + radius + " 0 0 0 " + (radius * 2) + " 0", fill: color1 } })
-                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M " + radius + " 0 a " + radius + " " + radius + " 0 0 0 -" + (radius * 2) + " 0", fill: color2 } })
+                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M " + radius + " 0 a " + radius + " " + radius + " 0 0 0 -" + (radius * 2) + " 0", fill: color1 } })
+                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M -" + radius + " 0 a " + radius + " " + radius + " 0 0 0 " + (radius * 2) + " 0", fill: color2 } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: "none" } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.75, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
                     .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } });
