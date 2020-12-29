@@ -103,40 +103,51 @@ let refresh = function () {
         return dataSet;
     };
 
-    let makeWheel = function (value, min, max) {
+    let makeWheel = function (average, value, min, max) {
 
         // compute the color of the ring
-        let color1, color2;
-        if (Array.isArray(value)) {
-            color1 = computeColor (value[0], min, max);
-            color2 = computeColor (value[1], min, max);
-            value = value[1];
-        } else {
-            color1 = color2 = computeColor (value, min, max);
-        }
+        let color1 = computeColor (average, min, max);
+        let color2 = computeColor (value, min, max);
 
-        value = Math.round (value * 10) / 10;
-        let v1 = Math.floor (value);
-        let v2 = Math.floor ((value - v1) * 10);
-        // determined roughly by experimentation
-        const v1CharWidth = 1 / 2.75;
-        const v2CharWidth = (1 / 4.5);
-        const v2CharSpacing = 0;
-        let overallWidth = (v1CharWidth * v1.toString ().length) + 1.33 * (v2CharSpacing + v2CharWidth);
-        let right = (overallWidth / 2) - (v2CharSpacing + v2CharWidth);
+        let addNumber = function (builder, size1, size2, dy1, dy2, width1, width2, spacing, baseline, value, color) {
+            value = Math.round (value * 10) / 10;
+            let v1 = Math.floor (value);
+            let v2 = Math.floor ((value - v1) * 10);
+
+            // determined roughly by experimentation
+            let overallWidth = (width1 * v1.toString ().length) + 1.33 * (spacing + width2);
+            let right = (overallWidth / 2) - (spacing + width2);
+
+            return builder
+                //.add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: baseline, x2: 0.65, y2: baseline, "stroke-width": 0.025, stroke: "#ddd" } })
+                .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: baseline, dy: dy1, fill: color, "font-family": "Helvetica, Arial", "font-size": size1, "text-anchor": "end" }, innerHTML: v1 })
+                .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + spacing, y: baseline, dy: dy2, fill: color, "font-family": "Helvetica, Arial", "font-size": size2, "text-anchor": "start" }, innerHTML: v2 })
+        };
+
         let radius = 0.95;
-
-        return Bedrock.Html.Builder
+        let builder = Bedrock.Html.Builder
             .begin("div", { style: { width: "100%", margin: "0" } })
                 .begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", viewBox: "-1 -1 2 2" },  style: { margin: "0", display: "block" } })
-                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: color1 } })
-                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.875, fill: color2 } })
+                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M -" + radius + " 0 a " + radius + " " + radius + " 0 0 0 " + (radius * 2) + " 0", fill: color1 } })
+                    .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M " + radius + " 0 a " + radius + " " + radius + " 0 0 0 -" + (radius * 2) + " 0", fill: color2 } })
+                    .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: "none" } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.75, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right, y: 0, dy: "12%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.65, "text-anchor": "end" }, innerHTML: v1 })
-                    .add ("http://www.w3.org/2000/svg;text", { attributes: { x: right + v2CharSpacing, y: 0, dy: "8%", fill: "black", "font-family": "Helvetica, Arial", "font-size": 0.4, "text-anchor": "start" }, innerHTML: v2 })
+                    .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } });
+        addNumber (builder, 0.3, 0.2, "5%", "3%", 1 / 4.75, 1 / 6, 0.05, -0.4, average, "gray")
+        return addNumber (builder, 0.65, 0.4, "12%", "7%",1 / 2.75, 1 / 4.5, 0.05, 0, value, "black")
                 .end ()
             .end ();
+    };
+
+    let computeAverage = function (data, timePeriod) {
+        let redux = data.reduce ( function (redux, value) {
+            if (value.x < timePeriod) {
+                redux.sum += value.y;
+                redux.count++;
+            }
+            return redux;
+        }, { sum: 0, count: 0 } );
+        return (redux.count > 0) ? (redux.sum / redux.count) : 0;
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
@@ -179,17 +190,8 @@ let refresh = function () {
 
                         // make a ping wheel
                         if (dataSets.length > dataSetsIndex) {
-                            // compute the average over the last 30 minutes
-                            let data = dataSets[dataSetsIndex];
-                            let redux = data.reduce ( function (redux, value) {
-                                if (value.x < 30) {
-                                    redux.sum += value.y;
-                                    redux.count++;
-                                }
-                                return redux;
-                            }, { sum: 0, count: 0 } );
-                            let average = (redux.count > 0) ? (redux.sum / redux.count) : 0;
-                            pingWheels.push(makeWheel([average, dataSets[dataSetsIndex][0].y], 10, 80));
+                            let average = computeAverage (dataSets[dataSetsIndex], 30);
+                            pingWheels.push(makeWheel(average, dataSets[dataSetsIndex][0].y, 10, 80));
                         }
 
                         // recur until we've read all the sources
@@ -249,7 +251,8 @@ let refresh = function () {
             // create the temperature wheel element
             let wheelDivElement = document.getElementById("plot-temperature-wheel");
             wheelDivElement.innerHTML = "";
-            wheelDivElement.appendChild(makeWheel(dataSets[0][0].y, 45, 85));
+            let average = computeAverage (dataSets[0], 30);
+            wheelDivElement.appendChild(makeWheel(average, dataSets[0][0].y, 45, 85));
 
             // create the actual plot
             let svg = PlotSvg
