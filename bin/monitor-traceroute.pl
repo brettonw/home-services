@@ -55,7 +55,7 @@ sub getRouteHostCount {
 
 sub scrubRouteHosts {
     # adjust the maxHops value. start by getting the expected count from the first route host, which is our router
-    print STDERR "Common hosts in routes:\n";
+    print STDERR "\nCommon hosts in routes:\n";
     my $expectedCount = getRouteHostCount (1);
     for (my $i = 1; $i < scalar (@$routeHosts); $i++) {
         if (exists ($routeHosts->[$i])) {
@@ -106,5 +106,6 @@ while (1) {
     scrubRouteHosts ();
 
     print STDERR "\nSleeping for 20 minutes...\n";
-    sleep (1200);
+    #sleep (1200);
+    sleep (20);
 }
