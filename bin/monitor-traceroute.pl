@@ -43,7 +43,7 @@ while (1) {
         # traceroute gives output for lines we care about will have the form:
         # " 3  24.124.180.217  9.795 ms  9.270 ms  10.184 ms"
         my $expectedIndex = 1;
-        for my $line (split (/^/, `traceroute -n -m $maxHops $targetHost`)) {
+        for my $line (split (/^/, `traceroute -n -m $maxHops -z 0.1 $targetHost`)) {
             chomp $line;
             if ($line =~ /^\s+(\d)\s+(\d+\.\d+\.\d+\.\d+)(\s+(\d+\.\d+\s+ms|\*)){3}$/) {
                 $expectedIndex = gatherRouteHost ($line, $expectedIndex, $1, $2);
