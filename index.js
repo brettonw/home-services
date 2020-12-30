@@ -132,8 +132,9 @@ let refresh = function () {
                     .add ("http://www.w3.org/2000/svg;path", { attributes: { d: "M -" + radius + " 0 a " + radius + " " + radius + " 0 0 0 " + (radius * 2) + " 0", fill: color2 } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius, stroke: "#444", "stroke-width": 0.025, fill: "none" } })
                     .add ("http://www.w3.org/2000/svg;circle", { attributes: { cx: 0, cy: 0, r: radius * 0.75, stroke: "#444", "stroke-width": 0.025, fill: "white" } })
-                    .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } });
-        addNumber (builder, 0.3, 0.2, "5%", "3%", 1 / 5, 1 / 6, 0.025, -0.425, average, "gray")
+                    //.add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.65, y1: 0, x2: 0.65, y2: 0, "stroke-width": 0.025, stroke: "#ddd" } });
+                    .add ("http://www.w3.org/2000/svg;line", { attributes: { x1: -0.5, y1: 0.3, x2: 0.5, y2: 0.3, "stroke-width": 0.025, stroke: "#ddd" } });
+        addNumber (builder, 0.3, 0.2, "5%", "3%", 1 / 5, 1 / 6, 0.025, -0.425, average, "#666")
         return addNumber (builder, 0.65, 0.4, "12%", "7%",1 / 2.75, 1 / 4.5, 0.05, 0, value, "black")
                 .end ()
             .end ();
