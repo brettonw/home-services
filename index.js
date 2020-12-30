@@ -3,8 +3,8 @@
 const temperatureDataSourceUrl = "temperature.json";
 
 let computeColor = function (value, min, max) {
-    if (value < min) return "blue";
-    if (value > max) return "black";
+    if (value < min) return "#008";
+    if (value > max) return "#800";
 
     let interpolant = (value - min) / (max - min);
     //interpolant = Math.min (1, Math.max (0, interpolant));
