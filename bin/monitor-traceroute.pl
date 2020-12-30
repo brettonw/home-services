@@ -106,6 +106,6 @@ while (1) {
     scrubRouteHosts ();
 
     print STDERR "\nSleeping for 20 minutes...\n";
-    #sleep (1200);
-    sleep (20);
+    sleep (1200);
+    #sleep (20);
 }
