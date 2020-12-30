@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-# this program will run traceroute on a series of hosts once every 20 minutes, and will output the
+# this program will periodically run traceroute on a series of hosts, and will output the
 # lowest common denominator route that is always taken (the ISP)
 
 my $maxHops = 8;
