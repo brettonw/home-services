@@ -147,7 +147,7 @@ let refresh = function () {
 
     let computeAverage = function (data, timePeriod) {
         let redux = data.reduce ( function (redux, value) {
-            if (value.x < timePeriod) {
+            if ((value.x < timePeriod) && (value.y > 0)) {
                 redux.sum += value.y;
                 redux.count++;
             }
@@ -157,6 +157,9 @@ let refresh = function () {
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
+        const pingMin = 10;
+        const pingMax = 80;
+
         let dataSets = [];
         let legend = [];
         let pingColors = [];
@@ -197,11 +200,13 @@ let refresh = function () {
                         // make a ping wheel
                         if (dataSets.length > dataSetsIndex) {
                             let average = computeAverage (dataSets[dataSetsIndex], 30);
-                            pingWheels.push(makeWheel(average, dataSets[dataSetsIndex][0].y, 10, 80));
+                            pingWheels.push(makeWheel(average, dataSets[dataSetsIndex][0].y, pingMin, pingMax));
                         }
 
                         // recur until we've read all the sources
                         asyncGatherChart(sourceUrlIndex + 1);
+                    } else {
+                        pingWheels.push(makeWheel(0, 0, pingMin, pingMax));
                     }
                 });
             } else {
