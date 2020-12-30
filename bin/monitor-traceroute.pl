@@ -28,7 +28,8 @@ my $routeHosts = [];
 sub gatherRouteHost {
     my ($line, $expectedIndex, $index, $ip) = @_;
     if ($index == $expectedIndex) {
-        print STDERR "$index $ip [$line]\n";
+        #print STDERR "$index $ip [$line]\n";
+        print STDERR "  $index $ip\n";
         $expectedIndex++;
 
         # vivify the hash reference
@@ -54,8 +55,9 @@ sub getRouteHostCount {
 
 sub scrubRouteHosts {
     # adjust the maxHops value. start by getting the expected count from the first route host, which is our router
+    print STDERR "Common hosts in routes:\n";
     my $expectedCount = getRouteHostCount (1);
-    for (my $i = 2; $i < scalar (@$routeHosts); $i++) {
+    for (my $i = 1; $i < scalar (@$routeHosts); $i++) {
         if (exists ($routeHosts->[$i])) {
             # print everything in this reference
             my $hashRef = $routeHosts->[$i];
@@ -64,7 +66,7 @@ sub scrubRouteHosts {
                 my $routeHost = (keys (%$hashRef))[0];
                 my $routeHostCount = $hashRef->{$routeHost};
                 if ($routeHostCount == $expectedCount) {
-                    print STDERR "$i $routeHost\n";
+                    print STDERR "  $i $routeHost\n";
                     $maxHops = $i;
                 } else {
                     #print STDERR "RouteHousts at index ($i) has exactly one host, but does not match the expected count ($routeHostCount -> $expectedCount).\n";
@@ -86,9 +88,9 @@ while (1) {
     for my $targetHost (@$targetHosts) {
         # traceroute gives output for lines we care about will have the form:
         # " 3  24.124.180.217  9.795 ms  9.270 ms  10.184 ms"
-        print STDERR "TARGET: $targetHost\n";
+        print STDERR "\nTARGET: $targetHost\n";
         my $expectedIndex = 1;
-        for my $line (split (/^/, `traceroute -n -m $maxHops -z 50 $targetHost 2>&1`)) {
+        for my $line (split (/^/, `traceroute -n -m $maxHops -z 100 $targetHost 2>&1`)) {
             chomp $line;
             if ($line =~ /^\s+(\d)\s+(\d+\.\d+\.\d+\.\d+)(\s+(\d+\.\d+\s+ms|\*)){3}$/) {
                 $expectedIndex = gatherRouteHost ($line, $expectedIndex, $1, $2);
@@ -98,11 +100,11 @@ while (1) {
                 #print STDERR ("BAD LINE. [$line]\n");
             }
         }
-        print STDERR "\n";
     }
 
     # adjust the maxHops value, start by getting the expected count from the original host, which is certainly our router
     scrubRouteHosts ();
 
-    sleep (20);
+    print STDERR "\nSleeping for 20 minutes...\n";
+    sleep (1200);
 }
