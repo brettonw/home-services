@@ -201,6 +201,8 @@ let refresh = function () {
                         if (dataSets.length > dataSetsIndex) {
                             let average = computeAverage (dataSets[dataSetsIndex], 30);
                             pingWheels.push(makeWheel(average, dataSets[dataSetsIndex][0].y, pingMin, pingMax));
+                        } else {
+                            pingWheels.push(makeWheel(0, 0, pingMin, pingMax));
                         }
 
                         // recur until we've read all the sources
