@@ -2,9 +2,8 @@
 
 const temperatureDataSourceUrl = "temperature.json";
 
-let computeColor = function (value, min, max) {
-    if (value < min) return "#008";
-    if (value > max) return "#800";
+let computeColor = function (value, min, max, minColor, maxColor, zeroColor) {
+    if (value == 0) return zeroColor; else if (value < min) return minColor; else if (value > max) return maxColor;
 
     let interpolant = (value - min) / (max - min);
     //interpolant = Math.min (1, Math.max (0, interpolant));
@@ -17,10 +16,10 @@ let makeScale = function () {
     let element = document.getElementById("scaleBar");
     let height = element.clientHeight / element.clientWidth;
     let builder = Bedrock.Html.Builder.begin ("http://www.w3.org/2000/svg;svg", { attributes: { width: "100%", height: "100%", viewBox: "0 0 1 " + height },  style: { margin: "0", display: "block" } });
-    const divisions = 50;
+    const divisions = 100;
     let scale = 1 / divisions;
     for (let i = 0; i < divisions; ++i) {
-        builder.add ("http://www.w3.org/2000/svg;rect", { attributes: { x: i * scale, y: 0, width: scale, height: height, fill: computeColor (i * scale, 0, 1) } });
+        builder.add ("http://www.w3.org/2000/svg;rect", { attributes: { x: i * scale, y: 0, width: scale, height: height, fill: computeColor ((i + 0.5) * scale, 0, 1) } });
     }
     document.getElementById("scaleBar").appendChild(builder.end ());
 };
@@ -105,11 +104,11 @@ let refresh = function () {
         return dataSet;
     };
 
-    let makeWheel = function (average, value, min, max) {
+    let makeWheel = function (average, value, min, max, minColor = "#080", maxColor = "#800", zeroColor = "#008") {
 
         // compute the color of the ring
-        let color1 = computeColor (average, min, max);
-        let color2 = computeColor (value, min, max);
+        let color1 = computeColor (average, min, max, minColor, maxColor, zeroColor);
+        let color2 = computeColor (value, min, max, minColor, maxColor, zeroColor);
 
         let addNumber = function (builder, size1, size2, dy1, dy2, width1, width2, spacing, baseline, value, color) {
             value = Math.round (value * 10) / 10;
@@ -154,7 +153,7 @@ let refresh = function () {
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
-        const pingMin = 5;
+        const pingMin = 10;
         const pingMax = 80;
 
         let dataSets = [];
