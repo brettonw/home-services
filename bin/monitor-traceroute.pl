@@ -28,8 +28,12 @@ my $routeHosts = [];
 sub gatherRouteHost {
     my ($line, $expectedIndex, $index, $ip) = @_;
     if ($index == $expectedIndex) {
-        print STDERR "$index $ip ($line)\n";
+        print STDERR "$index $ip [$line]\n";
         $expectedIndex++;
+
+
+    } else {
+        print STDERR "UNEXPECTED INDEX ($index) WHEN EXPECTING ($expectedIndex). [$line]\n";
     }
     return $expectedIndex;
 }
@@ -42,27 +46,14 @@ while (1) {
         for my $line (split (/^/, `traceroute -n -m $maxHops $targetHost`)) {
             chomp $line;
             if ($line =~ /^\s+(\d)\s+(\d+\.\d+\.\d+\.\d+)(\s+(\d+\.\d+\s+ms|\*)){3}$/) {
+                $expectedIndex = gatherRouteHost ($line, $expectedIndex, $1, $2);
+            } elsif ($line =~ /^\s+(\d)\s+(\*\s+)+(\d+\.\d+\.\d+\.\d+)(\s+(\d+\.\d+\s+ms|\*)){2,}$/) {
                 $expectedIndex = gatherRouteHost ($line, $expectedIndex, $1, $3);
-
-                my $index = $1;
-                my $ip = $3;
-
-
-                if ($index == $expectedIndex) {
-                    $expectedIndex++;
-                    print STDERR "$index $ip ($line)\n";
-                }
-            } elsif ($line =~ /^\s+(\d)\s+(\*\s+)*(\d+\.\d+\.\d+\.\d+)(\s+(\d+\.\d+\s+ms|\*)){2,}$/) {
-                my $index = $1;
-                my $ip = $3;
-                if ($index == $expectedIndex) {
-                    $expectedIndex++;
-                    print STDERR "$index $ip ($line)\n";
-                }
             } else {
-                print STDERR ("BAD LINE: $line\n");
+                print STDERR ("BAD LINE. [$line]\n");
             }
         }
+        print STDERR "\n";
     }
     exit ();
 }

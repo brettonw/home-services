@@ -153,7 +153,7 @@ let refresh = function () {
     };
 
     let makePingChart = function (sourceUrls, chartElementId, wheelElementId) {
-        const pingMin = 10;
+        const pingMin = 1;
         const pingMax = 80;
 
         let dataSets = [];
