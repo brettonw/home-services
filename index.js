@@ -3,12 +3,12 @@
 const temperatureDataSourceUrl = "temperature.json";
 
 let computeColor = function (value, min, max) {
-    if ((value >= min) && (value <= max)) {
+    if ((value > 0) && (value <= max)) {
         let sq = function (x) {
             return Math.sqrt(x);
         };
         let interpolant = (value - min) / (max - min);
-        //interpolant = Math.min (1, Math.max (0, interpolant));
+        interpolant = Math.min (1, interpolant);
         let rValue = Math.floor(255 * ((interpolant < 0.5) ? sq(interpolant * 2) : 1));
         let gValue = Math.floor(255 * ((interpolant > 0.5) ? sq(1 - ((interpolant * 2) - 1)) : 1));
         return "rgb(" + rValue + "," + gValue + ",0)";
