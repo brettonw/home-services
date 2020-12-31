@@ -180,7 +180,6 @@ let refresh = function () {
                         for (let source of splitSource(response)) {
                             // only push a legend entry once
                             legend.push(info.target);
-                            pingColors.push(colors[sourceUrlIndex % colors.length]);
                             info.target = "";
 
                             // loop over all the data to add them to the dataSets
@@ -190,6 +189,7 @@ let refresh = function () {
                             })), "avg");
                             if (dataSet.length > 0) {
                                 dataSets.push(dataSet);
+                                pingColors.push(colors[sourceUrlIndex % colors.length]);
                             }
                         }
 
