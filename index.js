@@ -178,10 +178,6 @@ let refresh = function () {
 
                         // loop over all of the source sets
                         for (let source of splitSource(response)) {
-                            // only push a legend entry once
-                            legend.push(info.target);
-                            info.target = "";
-
                             // loop over all the data to add them to the dataSets
                             let dataSet = digestSource(source.map(a => ({
                                 timestamp: a.timestamp,
@@ -190,6 +186,10 @@ let refresh = function () {
                             if (dataSet.length > 0) {
                                 dataSets.push(dataSet);
                                 pingColors.push(colors[sourceUrlIndex % colors.length]);
+
+                                // only push a legend entry once
+                                legend.push(info.target);
+                                info.target = "";
                             }
                         }
 
