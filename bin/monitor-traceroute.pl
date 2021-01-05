@@ -9,18 +9,33 @@ use warnings;
 my $maxHops = 8;
 
 my $targetHosts = [
-    "1.1.1.1",
-    "microsoft.com",
-    "amazon.com",
-    "banctec.ca",
-    "r18.com",
-    "netflix.com",
-    "google.com",
-    "apple.com",
-    "nih.gov",
-    "youtube.com",
-    "baltimorecity.gov",
-    "jhu.edu"
+
+    "a.root-servers.net",
+    "b.root-servers.net",
+    "c.root-servers.net",
+    "d.root-servers.net",
+    "e.root-servers.net",
+    "f.root-servers.net",
+    "g.root-servers.net",
+    "h.root-servers.net",
+    "i.root-servers.net",
+    "j.root-servers.net",
+    "k.root-servers.net",
+    "l.root-servers.net",
+    "m.root-servers.net"
+
+    #"1.1.1.1",
+    #"microsoft.com",
+    #"amazon.com",
+    #"banctec.ca",
+    #"r18.com",
+    #"netflix.com",
+    #"google.com",
+    #"apple.com",
+    #"nih.gov",
+    #"youtube.com",
+    #"baltimorecity.gov",
+    #"jhu.edu"
 ];
 
 my $routeHosts = [];
