@@ -22,6 +22,7 @@ function restartProc () {
   else
     echo "Failed to start $command";
   fi
+  echo;
 }
 
 restartProc "get-temperature.sh";
