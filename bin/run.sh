@@ -9,7 +9,7 @@ fi
 # function to terminate and restart a process and report the results
 function restartProc () {
   local command=$1;
-  local pid=$(ps -e -f -opid,command | grep "$command" | grep -v "grep" | head | awk '{ print $1; exit }');
+  local pid=$(ps -e -o pid,command | grep "$command" | grep -v "grep" | head | awk '{ print $1; exit }');
   if [ ! -z "$pid" ]; then
     echo "Terminating $command ($pid)";
     kill -9 $pid;
@@ -17,7 +17,7 @@ function restartProc () {
   local outputname="$targetDir/out/${command// /_}.out";
   echo "Starting $command > $outputname";
   nohup $targetDir/bin/$command > $outputname 2>&1 &
-  pid=$(ps -e -f -opid,command | grep "$command" | grep -v "grep" | head | awk '{ print $1; exit }');
+  pid=$(ps -e -o pid,command | grep "$command" | grep -v "grep" | head | awk '{ print $1; exit }');
   if [ ! -z "$pid" ]; then
     echo "Started $command ($pid)";
   else
