@@ -15,7 +15,7 @@ function restartProc () {
   fi
   local outputname="$targetDir/out/${command// /_}.out";
   echo "Starting $command > $outputname";
-  nohup $targetDir/bin/$command.sh > $outputname 2>&1 &
+  nohup $targetDir/bin/$command > $outputname 2>&1 &
   pid=$(ps -e -f -opid,command | grep "$command" | grep -v "grep" | head | awk '{ print $1; exit }');
   if [ ! -z "$pid" ]; then
     echo "Started $command ($pid)";
