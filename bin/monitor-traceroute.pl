@@ -120,7 +120,7 @@ while (1) {
     # adjust the maxHops value, start by getting the expected count from the original host, which is certainly our router
     scrubRouteHosts ();
 
-    print STDERR "\nSleeping for 20 minutes...\n";
-    sleep (1200);
+    print STDERR "\nSleeping for $ARGV[0] minutes...\n";
+    sleep (1000 * $ARGV[0]);
     #sleep (20);
 }
