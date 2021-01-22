@@ -41,7 +41,7 @@ docker image prune -a --force --filter "until=24h";
 echo;
 
 # home services
-pushd ~/tomcat/webapps/home-services;
+pushd /var/lib/tomcat9/webapps/home-services;
 echo "synching home-services...";
 git pull;
 echo;

@@ -1,0 +1,14 @@
+[Unit]
+Description=Home Services
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/bash /var/lib/tomcat9/webapps/home-services/bin/run-all.sh
+WorkingDirectory=/var/lib/tomcat9/webapps/home-services
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=brettonw
+
+[Install]
+WantedBy=multi-user.target
