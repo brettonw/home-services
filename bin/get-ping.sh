@@ -39,7 +39,7 @@ do
     modulo=$(( counter % 6));
     if [ $modulo -eq 0 ]; then
         # limit the log output to 10G, about 1 day at every 10 seconds
-        tail -c 10G $rawFile >  "$rawFile.tmp";
+        tail -l 10K $rawFile >  "$rawFile.tmp";
         mv "$rawFile.tmp" $rawFile;
 
         # concat everything into the JSON log, this is a bit ugly, but we pass some additional info in the first record
