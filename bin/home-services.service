@@ -8,6 +8,8 @@ StandardOutput=inherit
 StandardError=inherit
 Restart=no
 User=brettonw
+RemainAfterExit=true
+Type=oneshot
 
 [Install]
 WantedBy=multi-user.target
