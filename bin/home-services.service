@@ -9,7 +9,7 @@ StandardError=inherit
 Restart=no
 User=brettonw
 RemainAfterExit=true
-Type=oneshot
+Type=forking
 
 [Install]
 WantedBy=multi-user.target
