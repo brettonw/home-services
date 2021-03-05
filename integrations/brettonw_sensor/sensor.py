@@ -1,4 +1,16 @@
-""" Platform for brettonw sensor integration. """
+""" Platform for brettonw sensor integration.
+
+Example configuration.yaml entry:
+
+
+sensor:
+  - platform: brettonw_sensor
+    name: "Test0 Brettonw"
+    host: "rpi-test-0"
+    scan_interval: 30
+
+"""
+
 from homeassistant.const import CONF_HOST, CONF_NAME, TEMP_CELSIUS, PRESSURE_HPA, PERCENTAGE, DEVICE_CLASS_TIMESTAMP, DEVICE_CLASS_TEMPERATURE, DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_PRESSURE
 from homeassistant.helpers.entity import Entity
 from homeassistant.components.sensor import PLATFORM_SCHEMA
