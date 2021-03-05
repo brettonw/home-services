@@ -52,7 +52,10 @@ def api(host, fallback, refreshInterval):
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    record = hass.data[DOMAIN] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
+    if (not (DOMAIN in hass.data)):
+      hass.data[DOMAIN] = { }
+    dataHost = hass.data[DOMAIN]
+    record = dataHost[config[CONF_HOST]] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
     if (record["temperature"] != "-"):
         add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
         """
@@ -90,7 +93,7 @@ class BrettonwTemperatureSensor(Entity):
     def update(self):
         """Fetch new state data for the sensor."""
         try:
-            self._hass.data[DOMAIN] = api (self._host, self._hass.data[DOMAIN], DATA_REFRESH_INTERVAL_MS)
+            self._hass.data[DOMAIN][self._host] = api (self._host, self._hass.data[DOMAIN][self._host], DATA_REFRESH_INTERVAL_MS)
         except URLError as error:
             _LOGGER.error( "Unable to retrieve data from Sensor host ({}): {}".format(self._host, error.reason) )
             return
