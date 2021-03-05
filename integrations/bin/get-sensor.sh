@@ -21,7 +21,7 @@ do
     # temperature/relative humidity/pressure
     timestamp=$(date +%s%3N);
     sensorRead=$(/home/brettonw/bin/sensor.py);
-    echo "    , $sensorRead" >> $rawHistoryFile;
+    echo "    , { \"timestamp\": $timestamp, $sensorRead }" >> $rawHistoryFile;
     echo "$sensorRead" > $jsonNowFile;
 
     # increment the counter, then once per minute consolidate the JSON output
