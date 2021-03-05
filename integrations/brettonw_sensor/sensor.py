@@ -43,21 +43,16 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 def api(host, fallback, refreshInterval):
     result = fallback
     now = datetime.timestamp(datetime.now()) * 1000
-    _LOGGER.debug("Request from host: {}".format (host))
     if ((now - fallback["timestamp"]) > refreshInterval):
         url = "http://{}.local/sensor/now.json".format (host)
-        _LOGGER.debug("Request from url: {}".format (url))
         req = request.Request(url)
         with request.urlopen(req) as response:
-            _LOGGER.debug("response as json: {}".format (response))
             result = json.loads(response.read().decode())
-            #_LOGGER.debug(resp_data)
     return result
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
     record = hass.data[DOMAIN] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
-    _LOGGER.debug("Got record")
     if (record["temperature"] != "-"):
         add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
         """
