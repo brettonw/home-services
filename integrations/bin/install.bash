@@ -1,5 +1,13 @@
 #! /usr/bin/env bash
 
+# configure the target dir
+sensorDir="/var/www/html/sensor";
+if [ ! -d "$sensorDir" ]; then
+  sudo mkdir "$sensorDir";
+  sudo chown brettonw:brettonw "$sensorDir";
+  chmod ugo+r "$sensorDir";
+fi
+
 # configure a sensor
 workingPath="/home/brettonw/bin";
 sensorFile="$workingPath/sensor.py";

@@ -4,13 +4,10 @@
 echoerr() { echo "$@" 1>&2; }
 
 # setup the log file, dropped directly in the web server path
-targetDir="/var/www/html";
-if [ ! -d "$targetDir/raw" ]; then
-  mkdir -p "$targetDir/raw";
-fi
-rawHistoryFile="$targetDir/raw/sensor-history.raw";
-jsonHistoryFile="$targetDir/sensor-history.json";
-jsonNowFile="$targetDir/sensor-now.json";
+sensorDir="/var/www/html/sensor";
+rawHistoryFile="$sensorDir/history.raw";
+jsonHistoryFile="$sensorDir/history.json";
+jsonNowFile="$sensorDir/now.json";
 
 # setup the script start time and the counter
 startTimestamp=$(date +%s%3N);
@@ -24,12 +21,8 @@ do
     # temperature/relative humidity/pressure
     timestamp=$(date +%s%3N);
     sensorRead=$(/home/brettonw/bin/sensor.py);
-    temperature=$(echo sensorRead | awk '{split($0,a,"/"); print a[1]}');
-    humidity=$(echo sensorRead | awk '{split($0,a,"/"); print a[2]}');
-    pressure=$(echo sensorRead | awk '{split($0,a,"/"); print a[3]}');
-    sensorNow="{ \"timestamp\": $timestamp, \"temperature\": \"$temperature\", \"humidity\": \"$humidity\", \"pressure\": \"$pressure\" }";
-    echo "    , $sensorNow" >> $rawHistoryFile;
-    echo "$sensorNow" > $jsonNowFile;
+    echo "    , $sensorRead" >> $rawHistoryFile;
+    echo "$sensorRead" > $jsonNowFile;
 
     # increment the counter, then once per minute consolidate the JSON output
     counter=$(( counter + 1 ));
