@@ -32,7 +32,7 @@ def api(host, fallback, refreshInterval):
     result = fallback
     now = datetime.timestamp(datetime.now()) * 1000
     if ((now - fallback["timestamp"]) > refreshInterval):
-        url = "http://{}/sensor/now.json".format (host)
+        url = "http://{}.local/sensor/now.json".format (host)
         req = request.Request(url)
         with request.urlopen(req) as response:
             result = json.loads(response.read().decode())
@@ -42,6 +42,7 @@ def api(host, fallback, refreshInterval):
 async def setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Set up the sensor platform."""
     record = hass.data[DOMAIN] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
+    _LOGGER.info("Got record")
     if (record["temperature"] != "-"):
         async_add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
         """
