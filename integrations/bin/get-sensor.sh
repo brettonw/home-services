@@ -35,7 +35,7 @@ do
 
         # concat everything into the JSON log, this is a bit ugly
         echo "[" > $jsonHistoryFile;
-        echo "      { \"timestamp\": 0, \"temperature\": 0 }" >> $jsonHistoryFile;
+        echo "      { \"timestamp\": 0 }" >> $jsonHistoryFile;
         cat $rawHistoryFile >> $jsonHistoryFile;
         echo "]" >> $jsonHistoryFile;
     fi
