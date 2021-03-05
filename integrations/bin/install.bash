@@ -5,7 +5,7 @@ workingPath="/home/brettonw/bin";
 sensorFile="$workingPath/sensor.py";
 if [ ! -e "$sensorFile" ]; then
   echo "No sensor is configured. The choices are:";
-  find "$workingPath" -name "sensor-*"  -printf '    %P\n' | sed -e "s/sensor-//" | sed -e "s/.py$//";
+  find "$workingPath" -follow -name "sensor-*"  -printf '    %P\n' | sed -e "s/sensor-//" | sed -e "s/.py$//";
   read -p "Which sensor would you like to use? " sensorName;
 
   targetSensor="$workingPath/sensor-$sensorName.py";
@@ -19,6 +19,6 @@ if [ -e "$sensorFile" ]; then
   serviceName="get-sensor.service";
   sudo systemctl stop "$serviceName";
   sudo cp "$workingPath/$serviceName" "/lib/systemd/system/"
-  sudo systemctl enble "$serviceName";
+  sudo systemctl enable "$serviceName";
   sudo systemctl start "$serviceName";
 fi
