@@ -82,3 +82,4 @@ class BrettonwTemperatureSensor(Entity):
             self._hass.data[DOMAIN] = api (self._host, self._hass.data[DOMAIN], DATA_REFRESH_INTERVAL_MS)
         except URLError as error:
             _LOGGER.error( "Unable to retrieve data from Sensor host ({}): {}".format(self._host, error.reason) )
+            return
