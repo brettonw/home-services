@@ -1,0 +1,9 @@
+{
+  "domain": "brettonw",
+  "name": "temperature",
+  "version": "1.0.0",
+  "documentation": "https://www.example.com",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": []
+}
