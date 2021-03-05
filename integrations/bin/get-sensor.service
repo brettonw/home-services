@@ -1,0 +1,14 @@
+[Unit]
+Description=Get-Sensor
+
+[Service]
+ExecStart=/usr/bin/bash /home/brettonw/bin/get-sensor.sh
+StandardOutput=inherit
+StandardError=inherit
+Restart=no
+User=brettonw
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
+
