@@ -2,7 +2,7 @@
 
 # configure the target dir
 sensorDir="/var/www/html/sensor";
-rm -rf "$sensorDir";
+sudo rm -rf "$sensorDir";
 if [ ! -d "$sensorDir" ]; then
   sudo mkdir "$sensorDir";
   sudo chown brettonw:brettonw "$sensorDir";
