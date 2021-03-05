@@ -83,7 +83,7 @@ class BrettonwTemperatureSensor(Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._hass.data[DOMAIN]["temperature"]
+        return self._hass.data[DOMAIN][self._host]["temperature"]
 
     @property
     def unit_of_measurement(self):
