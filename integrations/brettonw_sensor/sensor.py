@@ -15,8 +15,8 @@ _LOGGER = logging.getLogger(__name__)
 DOMAIN = "brettonw_sensor"
 DOMAIN_DATA = DOMAIN + "data"
 
-#SCAN_INTERVAL = timedelta(seconds=5)
-DATA_REFRESH_INTERVAL_MS = 30 * 1000
+SCAN_INTERVAL = timedelta(seconds=10)
+DATA_REFRESH_INTERVAL_MS = 10 * 1000
 
 TEMPERATURE_CORRECTION = "temperature_correction"
 
@@ -42,12 +42,12 @@ def api(host, fallback, refreshInterval):
             #_LOGGER.debug(resp_data)
     return result
 
-async def setup_platform(hass, config, async_add_entities, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
     record = hass.data[DOMAIN] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
     _LOGGER.debug("Got record")
     if (record["temperature"] != "-"):
-        async_add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
+        add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
         """
     if (record["humidity"] != "-"):
         async_add_entities([BrettonwHumiditySensor(config[CONF_HOST], config[CONF_NAME])])
