@@ -10,7 +10,6 @@ import json
 import logging
 from datetime import timedelta, datetime
 
-
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "brettonw_sensor"
