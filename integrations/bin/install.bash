@@ -25,7 +25,7 @@ if [ ! -e "$sensorFile" ]; then
 fi
 
 if [ -e "$sensorFile" ]; then
-  existing=$(ls -l "$sensorFile" | | sed -e "s/^.*-> //");
+  existing=$(ls -l "$sensorFile" | sed -e "s/^.*-> //");
   existing=$(basename "$existing" | sed -e "s/sensor-//" | sed -e "s/.py$//");
   echo "Configured for sensor ($existing).";
   # copy the service file to the lib directory and start it

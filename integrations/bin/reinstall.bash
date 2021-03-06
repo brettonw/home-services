@@ -4,7 +4,7 @@
 workingPath="/home/brettonw/bin";
 sensorFile="$workingPath/sensor.py";
 if [ -e "$sensorFile" ]; then
-  existing=$(ls -l "$sensorFile" | | sed -e "s/^.*-> //");
+  existing=$(ls -l "$sensorFile" | sed -e "s/^.*-> //");
   existing=$(basename "$existing" | sed -e "s/sensor-//" | sed -e "s/.py$//");
   rm -f "$sensorFile";
   echo "Removed existing sensor configuration ($existing).";
