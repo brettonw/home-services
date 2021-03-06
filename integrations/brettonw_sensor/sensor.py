@@ -57,7 +57,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     dataHost = hass.data[DOMAIN]
     record = dataHost[config[CONF_HOST]] = api (config[CONF_HOST], { "timestamp": 0 }, 0)
     if (record["temperature"] != "-"):
-        add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature")])
+        correction = 0
+        if (TEMPERATURE_CORRECTION in config):
+            correction = config[TEMPERATURE_CORRECTION]
+        add_entities([BrettonwTemperatureSensor(hass, config[CONF_HOST], config[CONF_NAME] + "_temperature", correction)])
         """
     if (record["humidity"] != "-"):
         async_add_entities([BrettonwHumiditySensor(config[CONF_HOST], config[CONF_NAME])])
@@ -68,11 +71,12 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 class BrettonwTemperatureSensor(Entity):
     """Representation of the brettonw temperature sensor."""
 
-    def __init__(self, hass, host, name):
+    def __init__(self, hass, host, name, correction):
         """Initialize the sensor."""
         self._hass = hass
         self._host = host
         self._name = name
+        self._correction = correction
         self.update()
 
     @property
@@ -83,7 +87,7 @@ class BrettonwTemperatureSensor(Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._hass.data[DOMAIN][self._host]["temperature"]
+        return self._hass.data[DOMAIN][self._host]["temperature"] + self._correction
 
     @property
     def unit_of_measurement(self):
