@@ -4,10 +4,10 @@
 sensorDir="/var/www/html/sensor";
 sudo rm -rf "$sensorDir";
 if [ ! -d "$sensorDir" ]; then
-  echo "Creating $sensorDir";
   sudo mkdir "$sensorDir";
   sudo chown brettonw:brettonw "$sensorDir";
   chmod ugo+r "$sensorDir";
+  echo "Created sensor dir ($sensorDir).";
 fi
 
 # configure a sensor
@@ -30,10 +30,10 @@ if [ -e "$sensorFile" ]; then
   echo "Configured for sensor ($existing).";
   # copy the service file to the lib directory and start it
   serviceName="get-sensor.service";
-  echo "Installing $serviceName";
+  echo "Installing service \"$serviceName\"...";
   sudo systemctl stop "$serviceName";
   sudo cp "$workingPath/$serviceName" "/lib/systemd/system/"
   sudo systemctl enable "$serviceName";
   sudo systemctl start "$serviceName";
 fi
-echo "Done";
+echo "Done.";
