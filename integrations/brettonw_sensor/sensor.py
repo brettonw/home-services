@@ -8,6 +8,7 @@ sensor:
     name: "Test0 Brettonw"
     host: "rpi-test-0"
     scan_interval: 30
+    temperature_correction: 0
 
 """
 
