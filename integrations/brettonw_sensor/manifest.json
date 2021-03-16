@@ -1,9 +1,0 @@
-{
-  "domain": "brettonw_sensor",
-  "name": "brettonw_sensor",
-  "version": "1.0.0",
-  "documentation": "https://www.example.com",
-  "dependencies": [],
-  "codeowners": [],
-  "requirements": []
-}

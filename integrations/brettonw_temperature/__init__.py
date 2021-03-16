@@ -1,1 +1,0 @@
-"""The brettonw temperature integration."""

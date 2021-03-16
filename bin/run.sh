@@ -28,5 +28,5 @@ function restartProc () {
 
 # restart the monitor procs
 restartProc "get-temperature.sh";
-restartProc "get-ping.sh 68.87.168.53";
+restartProc "get-ping.sh 96.110.235.81";
 restartProc "get-ping.sh 96.120.104.221";

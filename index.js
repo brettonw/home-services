@@ -229,7 +229,7 @@ let refresh = function () {
         };
         asyncGatherChart(0);
     };
-    makePingChart(["ping-96.120.104.221.json", "ping-68.87.168.53.json"], "plot-ping-chart", "plot-ping-wheel");
+    makePingChart(["ping-96.120.104.221.json", "ping-96.110.235.81.json"], "plot-ping-chart", "plot-ping-wheel");
 
 
     Bedrock.Http.get(temperatureDataSourceUrl, (response) => {
